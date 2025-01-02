@@ -1,24 +1,7 @@
-//STD
-#include <iostream>
-
-//GLEW
-#include <GL/glew.h>
-
-//GLM
-#include "glm/ext/vector_float3.hpp"
-#include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
-
-//GENERAL
 #include "main.h"
-#include "shaders/LoadShaders.h"
-#include "FastNoiseLite.h"
 
 using namespace std;
 using namespace glm;
-
-//Window
-int windowWidth;
-int windowHeight;
 
 //VAO vertex attribute positions in correspondence to vertex attribute type
 enum VAO_IDs { Triangles, Indices, Colours, Textures, NumVAOs = 2 };
@@ -45,8 +28,8 @@ float cameraPitch = 0.0f;
 //Determines if first entry of mouse into window
 bool mouseFirstEntry = true;
 //Positions of camera from given last frame
-float cameraLastXPos = 800.0f / 2.0f;
-float cameraLastYPos = 600.0f / 2.0f;
+float cameraLastXPos = (float)WINDOW_WIDTH / 2.0f;
+float cameraLastYPos = (float)WINDOW_HEIGHT / 2.0f;
 
 //Time
 //Time change
@@ -66,26 +49,10 @@ const int trianglesGrid = squaresRow * squaresRow * trianglesPerSquare;
 
 int main()
 {
-    //Initialisation of GLFW
-    glfwInit();
-    //Initialisation of 'GLFWwindow' object
-    windowWidth = 1280;
-    windowHeight = 720;
-    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Lab8", NULL, NULL);
-
-    //Checks if window has been successfully instantiated
-    if (window == NULL)
+    if (InitialiseGLFW() == -1)
     {
-        cout << "GLFW Window did not instantiate\n";
-        glfwTerminate();
         return -1;
     }
-
-    //Sets cursor to automatically bind to window & hides cursor pointer
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    //Binds OpenGL to window
-    glfwMakeContextCurrent(window);
 
     //Initialisation of GLEW
     glewInit();
@@ -93,8 +60,8 @@ int main()
     //Load terrain shaders
     ShaderInfo terrainShaders[] =
     {
-        { GL_VERTEX_SHADER, "shaders/terrainShader.vert" },
-        { GL_FRAGMENT_SHADER, "shaders/terrainShader.frag" },
+        { GL_VERTEX_SHADER, "shaders/terrain.vert" },
+        { GL_FRAGMENT_SHADER, "shaders/terrain.frag" },
         { GL_NONE, NULL }
     };
 
@@ -103,21 +70,12 @@ int main()
     //Load lighting shaders
     ShaderInfo lightingShaders[] =
     {
-        { GL_VERTEX_SHADER, "shaders/lightingShader.vert" },
-        { GL_FRAGMENT_SHADER, "shaders/lightingShader.frag" },
+        { GL_VERTEX_SHADER, "shaders/lighting.vert" },
+        { GL_FRAGMENT_SHADER, "shaders/lighting.frag" },
         { GL_NONE, NULL }
     };
 
     lightingShader = LoadShaders(lightingShaders);
-
-    //Sets the viewport size within the window to match the window size of 1280x720
-    glViewport(0, 0, 1280, 720);
-
-    //Sets the framebuffer_size_callback() function as the callback for the window resizing event
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    //Sets the mouse_callback() function as the callback for the mouse movement event
-    glfwSetCursorPosCallback(window, mouse_callback);
 
     // Cube light source vertices
     float lightSourceVertices[] = {
@@ -317,8 +275,7 @@ int main()
     glBindVertexArray(VAOs[0]);
     //Sets indices of all required buffer objects
     glGenBuffers(NumBuffers, Buffers);
-    //glGenBuffers(1, &EBO);
-
+    
     //Binds vertex object to array buffer
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[Triangles]);
     //Allocates buffer memory for the vertices of the 'Triangles' buffer
@@ -374,7 +331,7 @@ int main()
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     //Projection matrix
-    mat4 projection = perspective(radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+    mat4 projection = perspective(radians(45.0f), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
@@ -586,4 +543,37 @@ void ProcessUserInput(GLFWwindow* WindowIn)
     {
         cameraPosition += normalize(cross(cameraFront, cameraUp)) * movementSpeed;
     }
+}
+
+int InitialiseGLFW()
+{
+    //Initialisation of GLFW
+    glfwInit();
+    //Initialisation of 'GLFWwindow' object
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Forest Game", NULL, NULL);
+
+    //Checks if window has been successfully instantiated
+    if (window == NULL)
+    {
+        cout << "GLFW Window did not instantiate\n";
+        glfwTerminate();
+        return -1;
+    }
+
+    //Sets cursor to automatically bind to window & hides cursor pointer
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    //Binds OpenGL to window
+    glfwMakeContextCurrent(window);
+
+    //Sets the viewport size within the window to match the window size of 1280x720
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    //Sets the framebuffer_size_callback() function as the callback for the window resizing event
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    //Sets the mouse_callback() function as the callback for the mouse movement event
+    glfwSetCursorPosCallback(window, mouse_callback);
+
+    return 0;
 }

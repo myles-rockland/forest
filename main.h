@@ -1,14 +1,36 @@
 #pragma once
+// STD
+#include <iostream>
 
+// GLEW
+#include <GL/glew.h>
+
+// GLM
+#include "glm/ext/vector_float3.hpp"
+#include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
+
+// GLFW
 #include <GLFW/glfw3.h>
 
-//Called on window resize
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-//Called on mouse movement
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+// Shaders and Noise
+#include "shaders/LoadShaders.h"
+#include "FastNoiseLite.h"
 
-//Processes user input on a particular window
+// Constants
+#include "Constants.h"
+
+// Called on window resize
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+// Called on mouse movement
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+// Processes user input on a particular window
 void ProcessUserInput(GLFWwindow* WindowIn);
 
+int InitialiseGLFW();
+
+// Shader programs
 GLuint terrainShader;
 GLuint lightingShader;
+
+// GLFW Window
+GLFWwindow* window;
