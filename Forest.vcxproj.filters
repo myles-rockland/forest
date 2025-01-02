@@ -27,6 +27,18 @@
     <ClInclude Include="shaders\LoadShaders.h">
       <Filter>shaders</Filter>
     </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -41,18 +53,27 @@
     <ClCompile Include="shaders\LoadShaders.cpp">
       <Filter>shaders</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\lightingShader.frag">
+    <None Include="shaders\lighting.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\lightingShader.vert">
+    <None Include="shaders\lighting.vert">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\terrainShader.frag">
+    <None Include="shaders\terrain.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\terrainShader.vert">
+    <None Include="shaders\terrain.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

@@ -137,21 +137,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="FastNoiseLite.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="shaders\LoadShaders.h" />
+    <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shaders\LoadShaders.cpp" />
     <ClCompile Include="stbImageLoader.cpp" />
+    <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\lightingShader.frag" />
-    <None Include="shaders\lightingShader.vert" />
-    <None Include="shaders\terrainShader.frag" />
-    <None Include="shaders\terrainShader.vert" />
+    <None Include="shaders\lighting.frag" />
+    <None Include="shaders\lighting.vert" />
+    <None Include="shaders\terrain.frag" />
+    <None Include="shaders\terrain.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
