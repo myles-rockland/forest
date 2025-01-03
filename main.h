@@ -19,6 +19,11 @@
 // Constants
 #include "Constants.h"
 
+// Custom classes
+#include "Light.h"
+#include "Terrain.h"
+#include "Camera.h"
+
 // Called on window resize
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 // Called on mouse movement
@@ -27,10 +32,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void ProcessUserInput(GLFWwindow* WindowIn);
 
 int InitialiseGLFW();
-
-// Shader programs
-GLuint terrainShader;
-GLuint lightingShader;
 
 // GLFW Window
 GLFWwindow* window;

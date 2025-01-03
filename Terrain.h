@@ -22,19 +22,20 @@
 
 class Terrain
 {
+public:
 	Terrain();
 	~Terrain();
+	void Draw(Camera* camera, Light* light);
+private:
 	void GenerateVertices();
 	void GenerateIndices();
 	void SetupBuffers();
-	void Draw(Camera camera, Light light);
 
-	const int RENDER_DISTANCE = 128; // Render width of the terrain
-	const int MAP_SIZE = RENDER_DISTANCE * RENDER_DISTANCE; // Size of map in x & z space
-
-	const int trianglesPerSquare = 2; // Two triangles per square to form a 1x1 chunk
-	const int squaresPerRow = RENDER_DISTANCE - 1; // Amount of squares/chunks per row
-	const int trianglesPerTerrain = squaresPerRow * squaresPerRow * trianglesPerSquare; // Amount of triangles in terrain
+	const int RENDER_DISTANCE; // Render width of the terrain
+	const int MAP_SIZE; // Size of map in x & z space
+	const int trianglesPerSquare; // Two triangles per square to form a 1x1 chunk
+	const int squaresPerRow; // Amount of squares/chunks per row
+	const int trianglesPerTerrain; // Amount of triangles in terrain
 
 	enum VAO_IDs { Triangles, Indices, Colours, Textures, NumVAOs = 2 }; // VAO vertex attribute positions in correspondence to vertex attribute type
 	GLuint VAOs[NumVAOs]; // VAOs

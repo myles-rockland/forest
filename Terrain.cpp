@@ -2,7 +2,7 @@
 
 using namespace glm;
 
-Terrain::Terrain()
+Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare)
 {
 	shaders[0] = { GL_VERTEX_SHADER, "shaders/terrain.vert" };
 	shaders[1] = { GL_FRAGMENT_SHADER, "shaders/terrain.frag" };
@@ -12,15 +12,13 @@ Terrain::Terrain()
 
     GenerateVertices();
     GenerateIndices();
-    // Terrain material vectors
-    /*vec3 materialAmbient(1.0f);
-    vec3 materialDiffuse(1.0f);
-    vec3 materialSpecular(0.1f);
-    GLfloat materialShininess = 2.0f;*/
+
     ambient = vec3(1.0f);
     diffuse = vec3(1.0f);
     specular = vec3(0.1f);
     shininess = 2.0f;
+
+    SetupBuffers();
 }
 
 Terrain::~Terrain()
@@ -44,6 +42,15 @@ void Terrain::GenerateVertices()
     for (int i = 0; i < MAP_SIZE; i++)
     {
         vertices[i] = new GLfloat[9]; // 3 position components, 3 colour components, 3 normal components
+        vertices[i][0] = 0.0f;
+        vertices[i][1] = 0.0f;
+        vertices[i][2] = 0.0f;
+        vertices[i][3] = 0.0f;
+        vertices[i][4] = 0.0f;
+        vertices[i][5] = 0.0f;
+        vertices[i][6] = 0.0f;
+        vertices[i][7] = 0.0f;
+        vertices[i][8] = 0.0f;
     }
 
     //Positions to start drawing from
@@ -102,26 +109,28 @@ void Terrain::GenerateVertices()
     {
         for (int x = 0; x < RENDER_DISTANCE; x++)
         {
-            //Setting of height from 2D noise value at respective x & y coordinate
-            vertices[i][1] = TerrainNoise.GetNoise((float)x, (float)y);
-
-            //Retrieval of biome to set
-            float biomeValue = BiomeNoise.GetNoise((float)x, (float)y);
-
-            if (biomeValue <= -0.75f) //Plains
+            int index = y * RENDER_DISTANCE + x;
+            if (index < MAP_SIZE)
             {
-                vertices[i][3] = 0.0f;
-                vertices[i][4] = 0.75f;
-                vertices[i][5] = 0.25f;
-            }
-            else //Desert
-            {
-                vertices[i][3] = 1.0f;
-                vertices[i][4] = 1.0f;
-                vertices[i][5] = 0.5f;
-            }
+                //Setting of height from 2D noise value at respective x & y coordinate
+                vertices[index][1] = TerrainNoise.GetNoise((float)x, (float)y);
 
-            i++;
+                //Retrieval of biome to set
+                float biomeValue = BiomeNoise.GetNoise((float)x, (float)y);
+
+                if (biomeValue <= -0.75f) //Plains
+                {
+                    vertices[index][3] = 0.0f;
+                    vertices[index][4] = 0.75f;
+                    vertices[index][5] = 0.25f;
+                }
+                else //Desert
+                {
+                    vertices[index][3] = 1.0f;
+                    vertices[index][4] = 1.0f;
+                    vertices[index][5] = 0.5f;
+                }
+            }
         }
     }
 }
@@ -133,6 +142,9 @@ void Terrain::GenerateIndices()
     for (int i = 0; i < trianglesPerTerrain; i++)
     {
         indices[i] = new GLuint[3];
+        indices[i][0] = 0;
+        indices[i][1] = 0;
+        indices[i][2] = 0;
     }
 
     //Positions to start mapping indices from
@@ -170,7 +182,7 @@ void Terrain::GenerateIndices()
     }
 
     // Use indices to generate normals using 2 edges of a triangle
-    for (int i = 0; i < trianglesPerTerrain; i++)
+    for (int i = 0; i < trianglesPerTerrain; i++) // Have to -1, 32,258 triangles per terrain, OFMCPWIENWEIOPGNWEGPIOWNEGPWEOIGNWEGOEWIPEGNEWGPIOWN
     {
         // Get vertices from indices
         GLfloat* v1 = vertices[indices[i][0]];
@@ -238,9 +250,12 @@ void Terrain::SetupBuffers()
     //Normals
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    // Unbind VAO
+    glBindVertexArray(0);
 }
 
-void Terrain::Draw(Camera camera, Light light)
+void Terrain::Draw(Camera* camera, Light* light)
 {
     //Drawing terrain
     glUseProgram(shaderProgram);
@@ -250,15 +265,13 @@ void Terrain::Draw(Camera camera, Light light)
     mat4 model = mat4(1.0f);
     //Scaling to zoom in
     model = scale(model, vec3(2.0f, 2.0f, 2.0f));
-    //Looking straight forward
-    model = rotate(model, radians(0.0f), vec3(1.0f, 0.0f, 0.0f));
     //Elevation to look upon terrain
     model = translate(model, vec3(0.0f, -2.f, -1.5f));
 
     // View matrix
-    mat4 view = lookAt(camera.GetPosition(), camera.GetPosition() + camera.GetFront(), camera.GetFront()); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
+    mat4 view = lookAt(camera->GetPosition(), camera->GetPosition() + camera->GetFront(), camera->GetUp()); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
 
-    //Projection matrix
+    // Projection matrix
     mat4 projection = perspective(radians(45.0f), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
     // Calculate normal matrix from model on CPU and send to shader via uniform
@@ -277,20 +290,20 @@ void Terrain::Draw(Camera camera, Light light)
     glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, value_ptr(normalMatrix));
 
     int cameraPosLoc = glGetUniformLocation(shaderProgram, "cameraPos");
-    glUniformMatrix4fv(cameraPosLoc, 1, GL_FALSE, value_ptr(camera.GetPosition()));
+    glUniformMatrix4fv(cameraPosLoc, 1, GL_FALSE, value_ptr(camera->GetPosition()));
 
     // Light uniforms
     int lightPosLoc = glGetUniformLocation(shaderProgram, "light.position");
-    glUniformMatrix4fv(lightPosLoc, 1, GL_FALSE, value_ptr(light.GetPosition()));
+    glUniformMatrix4fv(lightPosLoc, 1, GL_FALSE, value_ptr(light->GetPosition()));
 
     int lightAmbientLoc = glGetUniformLocation(shaderProgram, "light.ambient");
-    glUniform3fv(lightAmbientLoc, 1, value_ptr(light.GetAmbient()));
+    glUniform3fv(lightAmbientLoc, 1, value_ptr(light->GetAmbient()));
 
     int lightDiffuseLoc = glGetUniformLocation(shaderProgram, "light.diffuse");
-    glUniform3fv(lightDiffuseLoc, 1, value_ptr(light.GetDiffuse()));
+    glUniform3fv(lightDiffuseLoc, 1, value_ptr(light->GetDiffuse()));
 
     int lightSpecularLoc = glGetUniformLocation(shaderProgram, "light.specular");
-    glUniform3fv(lightSpecularLoc, 1, value_ptr(light.GetSpecular()));
+    glUniform3fv(lightSpecularLoc, 1, value_ptr(light->GetSpecular()));
 
     // Material uniforms
     int ambientLoc = glGetUniformLocation(shaderProgram, "material.ambient");
@@ -307,4 +320,7 @@ void Terrain::Draw(Camera camera, Light light)
 
     glBindVertexArray(VAOs[0]);
     glDrawElements(GL_TRIANGLES, MAP_SIZE * 32, GL_UNSIGNED_INT, 0);
+
+    // Unbind VAO
+    glBindVertexArray(0);
 }
