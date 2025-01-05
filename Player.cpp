@@ -1,8 +1,7 @@
 #include "Player.h"
 
-Player::Player(Terrain* terrain, Camera* camera)
+Player::Player(Terrain* terrain, Camera* camera) : terrain(terrain)
 {
-    this->terrain = terrain;
 	// Spawn the player in middle of terrain
 	int middleIndex = terrain->GetRenderDistance() / 2;
     GLfloat** vertices = terrain->GetVertices();

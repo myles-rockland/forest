@@ -24,9 +24,6 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shaders\LoadShaders.h">
-      <Filter>shaders</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
     <ClInclude Include="model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -64,9 +64,6 @@
     </ClCompile>
     <ClCompile Include="stbImageLoader.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shaders\LoadShaders.cpp">
-      <Filter>shaders</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
@@ -83,6 +80,12 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\lighting.frag">
@@ -95,6 +98,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\terrain.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\monster.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\monster.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
