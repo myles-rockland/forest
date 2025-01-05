@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="FastNoiseLite.h" />
     <ClInclude Include="Game.h" />

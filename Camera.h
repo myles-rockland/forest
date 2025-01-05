@@ -1,18 +1,5 @@
 #pragma once
-// STD
-#include <iostream>
-
-// GLEW
-#include <GL/glew.h>
-
-// GLM
-#include "glm/ext/vector_float3.hpp"
-#include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
-
-// GLFW
-#include <GLFW/glfw3.h>
-
-#include "Constants.h"
+#include "Common.h"
 
 using namespace glm;
 
