@@ -2,7 +2,7 @@
 
 using namespace glm;
 
-Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare)
+Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f)
 {
 	shaders[0] = { GL_VERTEX_SHADER, "shaders/terrain.vert" };
 	shaders[1] = { GL_FRAGMENT_SHADER, "shaders/terrain.frag" };
@@ -54,7 +54,7 @@ void Terrain::GenerateVertices()
     }
 
     //Positions to start drawing from
-    float drawingStartPosition = 1.0f;
+    float drawingStartPosition = 0.0f;
     float columnVerticesOffset = drawingStartPosition;
     float rowVerticesOffset = drawingStartPosition;
 
@@ -66,7 +66,7 @@ void Terrain::GenerateVertices()
         vertices[i][2] = rowVerticesOffset;
 
         //Shifts x position across for next triangle along grid
-        columnVerticesOffset -= 0.0625f;
+        columnVerticesOffset += VERTICES_OFFSET;
 
         //Indexing of each chunk within row
         rowIndex++;
@@ -78,29 +78,26 @@ void Terrain::GenerateVertices()
             //Resets x position for next row of triangles
             columnVerticesOffset = drawingStartPosition;
             //Shifts y position
-            rowVerticesOffset -= 0.0625f;
+            rowVerticesOffset += VERTICES_OFFSET;
         }
     }
 
-    // Perlin noise for heightmap
-    FastNoiseLite TerrainNoise;
     //Setting noise type to Perlin
-    TerrainNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+    HeightMapNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
     //Sets the noise scale
-    TerrainNoise.SetFrequency(0.05f);
+    HeightMapNoise.SetFrequency(0.05f);
     //Generates a random seed between integers 0 & 100
     srand(time(0)); // Seeding the rand() function using time
     int terrainSeed = rand() % 100;
     //Sets seed for noise
-    TerrainNoise.SetSeed(terrainSeed);
+    HeightMapNoise.SetSeed(terrainSeed);
 
     //Biome noise
-    FastNoiseLite BiomeNoise;
     BiomeNoise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
     BiomeNoise.SetFrequency(0.05f);
-    srand(time(0)); // Seeding the rand() function using time
+    srand(time(0));
     int biomeSeed = rand() % 100;
-    TerrainNoise.SetSeed(biomeSeed);
+    BiomeNoise.SetSeed(biomeSeed);
 
     //Terrain vertex index
     int i = 0;
@@ -113,7 +110,7 @@ void Terrain::GenerateVertices()
             if (index < MAP_SIZE)
             {
                 //Setting of height from 2D noise value at respective x & y coordinate
-                vertices[index][1] = TerrainNoise.GetNoise((float)x, (float)y);
+                vertices[index][1] = HeightMapNoise.GetNoise((float)x, (float)y);
 
                 //Retrieval of biome to set
                 float biomeValue = BiomeNoise.GetNoise((float)x, (float)y);
@@ -264,9 +261,9 @@ void Terrain::Draw(Camera* camera, Light* light)
     //Model matrix
     mat4 model = mat4(1.0f);
     //Scaling to zoom in
-    model = scale(model, vec3(2.0f, 2.0f, 2.0f));
+    //model = scale(model, vec3(2.0f, 2.0f, 2.0f));
     //Elevation to look upon terrain
-    model = translate(model, vec3(0.0f, -2.f, -1.5f));
+    //model = translate(model, vec3(0.0f, -2.0f, -1.5f));
 
     // View matrix
     mat4 view = lookAt(camera->GetPosition(), camera->GetPosition() + camera->GetFront(), camera->GetUp()); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
@@ -324,3 +321,9 @@ void Terrain::Draw(Camera* camera, Light* light)
     // Unbind VAO
     glBindVertexArray(0);
 }
+
+FastNoiseLite Terrain::GetHeightMapNoise() const { return HeightMapNoise; }
+FastNoiseLite Terrain::GetBiomeNoise() const { return BiomeNoise; }
+int Terrain::GetRenderDistance() const { return RENDER_DISTANCE; }
+GLfloat** Terrain::GetVertices() const { return vertices; }
+float Terrain::GetVerticesOffset() const { return VERTICES_OFFSET; }
