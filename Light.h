@@ -23,8 +23,8 @@ private:
 	enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 }; // Buffer types
 	GLuint Buffers[NumBuffers]; // Buffer objects
 
-	ShaderInfo shaders[3];
-	GLuint shaderProgram;
+	Shader shaders; //ShaderInfo shaders[3];
+	//GLuint shaderProgram;
 
 	float vertices[3 * 6 * 6]; // 3 position components, 6 vertices in a face, 6 faces
 };

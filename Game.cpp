@@ -3,31 +3,57 @@ using namespace std;
 
 Game* Game::instance = nullptr;
 
-Game::Game() : deltaTime(0.0f), lastFrame(0.0f)
+Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true)
 {
     instance = this;
 
     camera = new Camera();
 
-    // Error handling for initialisation of GLFW
-    if (InitialiseGLFW() == -1)
+    //Initialisation of GLFW
+    glfwInit();
+
+    //Initialisation of 'GLFWwindow' object
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Forest Game", NULL, NULL);
+
+    //Checks if window has been successfully instantiated
+    if (window == NULL)
     {
+        cout << "GLFW Window did not instantiate\n";
+        glfwTerminate();
         isRunning = false;
-    }
-    else
-    {
-        isRunning = true;
+        return;
     }
 
-    //Initialisation of GLEW
-    glewInit();
+    //Sets cursor to automatically bind to window & hides cursor pointer
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    //Binds OpenGL to window
+    glfwMakeContextCurrent(window);
+
+    // Initialisation of GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        cout << "GLAD failed to initialise" << endl;
+        isRunning = false;
+        return;
+    }
+
+    //Sets the viewport size within the window to match the window size of 1280x720
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    //Sets the framebuffer_size_callback() function as the callback for the window resizing event
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    //Sets the mouse_callback() function as the callback for the mouse movement event
+    glfwSetCursorPosCallback(window, mouse_callback);
+
 }
 
 Game::~Game()
 {
     delete instance;
     delete camera;
-    delete window;
+    //delete window;
 }
 
 void Game::Run()
@@ -100,37 +126,4 @@ void Game::ProcessUserInput(GLFWwindow* windowIn)
     {
         player->ProcessInput(windowIn, deltaTime);
     }
-}
-
-int Game::InitialiseGLFW()
-{
-    //Initialisation of GLFW
-    glfwInit();
-    //Initialisation of 'GLFWwindow' object
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Forest Game", NULL, NULL);
-
-    //Checks if window has been successfully instantiated
-    if (window == NULL)
-    {
-        cout << "GLFW Window did not instantiate\n";
-        glfwTerminate();
-        return -1;
-    }
-
-    //Sets cursor to automatically bind to window & hides cursor pointer
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    //Binds OpenGL to window
-    glfwMakeContextCurrent(window);
-
-    //Sets the viewport size within the window to match the window size of 1280x720
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-    //Sets the framebuffer_size_callback() function as the callback for the window resizing event
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    //Sets the mouse_callback() function as the callback for the mouse movement event
-    glfwSetCursorPosCallback(window, mouse_callback);
-
-    return 0;
 }

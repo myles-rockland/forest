@@ -1,6 +1,6 @@
 #include "Light.h"
 
-Light::Light()
+Light::Light() : shaders("shaders/lighting.vert", "shaders/lighting.frag")
 {
     // Set vertices (cube)
     float cubeVertices[] = {
@@ -53,11 +53,11 @@ Light::Light()
     }
 
     //Load lighting shaders
-    shaders[0] = { GL_VERTEX_SHADER, "shaders/lighting.vert" };
+    /*shaders[0] = { GL_VERTEX_SHADER, "shaders/lighting.vert" };
     shaders[1] = { GL_FRAGMENT_SHADER, "shaders/lighting.frag" };
     shaders[2] = { GL_NONE, NULL };
 
-    shaderProgram = LoadShaders(shaders);
+    shaderProgram = LoadShaders(shaders);*/
 
     position = vec3(0.0f, 1.0f, 0.0f);
     ambient = vec3(0.2f);
@@ -85,7 +85,7 @@ void Light::SetupBuffers()
 
 void Light::Draw(Camera* camera)
 {
-    glUseProgram(shaderProgram);
+    shaders.use(); //glUseProgram(shaderProgram);
 
     // Model matrix
     mat4 model = glm::mat4(1.0f);
@@ -96,14 +96,22 @@ void Light::Draw(Camera* camera)
     //Projection matrix
     mat4 projection = perspective(radians(45.0f), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
-    int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    // GLEW version
+    /*int modelLoc = glGetUniformLocation(shaderProgram, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
 
     int viewLoc = glGetUniformLocation(shaderProgram, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(view));
 
     int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, value_ptr(projection));
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, value_ptr(projection));*/
+
+    // GLAD version
+    shaders.setMat4("model", model);
+
+    shaders.setMat4("view", view);
+
+    shaders.setMat4("projection", projection);
 
     glBindVertexArray(VAOs[0]);
     glDrawArrays(GL_TRIANGLES, 0, 36);

@@ -33,8 +33,9 @@ private:
 	enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 }; // Buffer types
 	GLuint Buffers[NumBuffers]; // Buffer objects
 
-	ShaderInfo shaders[3];
-	GLuint shaderProgram;
+	
+	Shader shaders; //ShaderInfo shaders[3];
+	//GLuint shaderProgram;
 
 	GLfloat** vertices;
 	GLfloat* verticesFlat;

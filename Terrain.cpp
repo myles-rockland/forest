@@ -2,13 +2,15 @@
 
 using namespace glm;
 
-Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f)
+Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag")
 {
-	shaders[0] = { GL_VERTEX_SHADER, "shaders/terrain.vert" };
+    // GLEW version
+
+	/*shaders[0] = { GL_VERTEX_SHADER, "shaders/terrain.vert" };
 	shaders[1] = { GL_FRAGMENT_SHADER, "shaders/terrain.frag" };
 	shaders[2] = { GL_NONE, NULL };
 
-	shaderProgram = LoadShaders(shaders);
+	shaderProgram = LoadShaders(shaders);*/
 
     GenerateVertices();
     GenerateIndices();
@@ -255,7 +257,7 @@ void Terrain::SetupBuffers()
 void Terrain::Draw(Camera* camera, Light* light)
 {
     //Drawing terrain
-    glUseProgram(shaderProgram);
+    shaders.use(); //glUseProgram(shaderProgram);
 
     //Transformations
     //Model matrix
@@ -274,46 +276,76 @@ void Terrain::Draw(Camera* camera, Light* light)
     // Calculate normal matrix from model on CPU and send to shader via uniform
     mat3 normalMatrix = transpose(inverse(mat3(model)));
 
-    int modelLoc = glGetUniformLocation(shaderProgram, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
+    // GLEW version
+    //int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
 
-    int viewLoc = glGetUniformLocation(shaderProgram, "view");
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(view));
+    //int viewLoc = glGetUniformLocation(shaderProgram, "view");
+    //glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(view));
 
-    int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, value_ptr(projection));
+    //int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    //glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, value_ptr(projection));
 
-    int normalMatrixLoc = glGetUniformLocation(shaderProgram, "normalMatrix");
-    glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, value_ptr(normalMatrix));
+    //int normalMatrixLoc = glGetUniformLocation(shaderProgram, "normalMatrix");
+    //glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, value_ptr(normalMatrix));
 
-    int cameraPosLoc = glGetUniformLocation(shaderProgram, "cameraPos");
-    glUniformMatrix4fv(cameraPosLoc, 1, GL_FALSE, value_ptr(camera->GetPosition()));
+    //int cameraPosLoc = glGetUniformLocation(shaderProgram, "cameraPos");
+    //glUniformMatrix4fv(cameraPosLoc, 1, GL_FALSE, value_ptr(camera->GetPosition()));
+
+    //// Light uniforms
+    //int lightPosLoc = glGetUniformLocation(shaderProgram, "light.position");
+    //glUniformMatrix4fv(lightPosLoc, 1, GL_FALSE, value_ptr(light->GetPosition()));
+
+    //int lightAmbientLoc = glGetUniformLocation(shaderProgram, "light.ambient");
+    //glUniform3fv(lightAmbientLoc, 1, value_ptr(light->GetAmbient()));
+
+    //int lightDiffuseLoc = glGetUniformLocation(shaderProgram, "light.diffuse");
+    //glUniform3fv(lightDiffuseLoc, 1, value_ptr(light->GetDiffuse()));
+
+    //int lightSpecularLoc = glGetUniformLocation(shaderProgram, "light.specular");
+    //glUniform3fv(lightSpecularLoc, 1, value_ptr(light->GetSpecular()));
+
+    //// Material uniforms
+    //int ambientLoc = glGetUniformLocation(shaderProgram, "material.ambient");
+    //glUniform3fv(ambientLoc, 1, value_ptr(ambient));
+
+    //int diffuseLoc = glGetUniformLocation(shaderProgram, "material.diffuse");
+    //glUniform3fv(diffuseLoc, 1, value_ptr(diffuse));
+
+    //int specularLoc = glGetUniformLocation(shaderProgram, "material.specular");
+    //glUniform3fv(specularLoc, 1, value_ptr(specular));
+
+    //int shininessLoc = glGetUniformLocation(shaderProgram, "material.shininess");
+    //glUniform1f(shininessLoc, shininess);
+
+    // GLAD version
+    shaders.setMat4("model", model);
+
+    shaders.setMat4("view", view);
+
+    shaders.setMat4("projection", projection);
+
+    shaders.setMat3("normalMatrix", normalMatrix);
+
+    shaders.setVec3("cameraPos", camera->GetPosition());
 
     // Light uniforms
-    int lightPosLoc = glGetUniformLocation(shaderProgram, "light.position");
-    glUniformMatrix4fv(lightPosLoc, 1, GL_FALSE, value_ptr(light->GetPosition()));
+    shaders.setVec3("light.position", light->GetPosition());
 
-    int lightAmbientLoc = glGetUniformLocation(shaderProgram, "light.ambient");
-    glUniform3fv(lightAmbientLoc, 1, value_ptr(light->GetAmbient()));
+    shaders.setVec3("light.ambient", light->GetAmbient());
 
-    int lightDiffuseLoc = glGetUniformLocation(shaderProgram, "light.diffuse");
-    glUniform3fv(lightDiffuseLoc, 1, value_ptr(light->GetDiffuse()));
+    shaders.setVec3("light.diffuse", light->GetDiffuse());
 
-    int lightSpecularLoc = glGetUniformLocation(shaderProgram, "light.specular");
-    glUniform3fv(lightSpecularLoc, 1, value_ptr(light->GetSpecular()));
+    shaders.setVec3("light.specular", light->GetSpecular());
 
     // Material uniforms
-    int ambientLoc = glGetUniformLocation(shaderProgram, "material.ambient");
-    glUniform3fv(ambientLoc, 1, value_ptr(ambient));
+    shaders.setVec3("material.ambient", ambient);
 
-    int diffuseLoc = glGetUniformLocation(shaderProgram, "material.diffuse");
-    glUniform3fv(diffuseLoc, 1, value_ptr(diffuse));
+    shaders.setVec3("material.diffuse", diffuse);
 
-    int specularLoc = glGetUniformLocation(shaderProgram, "material.specular");
-    glUniform3fv(specularLoc, 1, value_ptr(specular));
+    shaders.setVec3("material.specular", specular);
 
-    int shininessLoc = glGetUniformLocation(shaderProgram, "material.shininess");
-    glUniform1f(shininessLoc, shininess);
+    shaders.setFloat("material.shininess", shininess);
 
     glBindVertexArray(VAOs[0]);
     glDrawElements(GL_TRIANGLES, MAP_SIZE * 32, GL_UNSIGNED_INT, 0);
