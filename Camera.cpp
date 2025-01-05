@@ -3,10 +3,10 @@
 Camera::Camera() : sensitivity(0.025f), movementSpeed(1.0f)
 {
 	position = vec3(0.0f, 0.0f, 3.0f);
-	front = vec3(0.0f, 0.0f, -1.0f);
+	front = vec3(0.0f, 0.0f, 1.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 
-	yaw = -90.0f;
+	yaw = 90.0f;
 	pitch = 0.0f;
 
 	mouseFirstEntry = true;
@@ -58,29 +58,7 @@ void Camera::MouseCallback(GLFWwindow* window, double xpos, double ypos)
     front = normalize(direction);
 }
 
-void Camera::ProcessUserInput(GLFWwindow* windowIn, float deltaTime)
-{
-    //Extent to which to move in one instance
-    const float speed = movementSpeed * deltaTime;
-    //WASD controls
-    if (glfwGetKey(windowIn, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        position += speed * front;
-    }
-    if (glfwGetKey(windowIn, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        position -= speed * front;
-    }
-    if (glfwGetKey(windowIn, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        position -= normalize(cross(front, up)) * speed;
-    }
-    if (glfwGetKey(windowIn, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        position += normalize(cross(front, up)) * speed;
-    }
-}
-
 vec3 Camera::GetPosition() const { return position; }
+void Camera::SetPosition(vec3 positionIn) { position = positionIn; }
 vec3 Camera::GetFront() const { return front; }
 vec3 Camera::GetUp() const { return up; }

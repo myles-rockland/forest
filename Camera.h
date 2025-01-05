@@ -21,10 +21,10 @@ class Camera
 public:
 	Camera();
 	vec3 GetPosition() const;
+	void SetPosition(vec3 positionIn);
 	vec3 GetFront() const;
 	vec3 GetUp() const;
 	void MouseCallback(GLFWwindow* window, double xpos, double ypos);
-	void ProcessUserInput(GLFWwindow* windowIn, float deltaTime);
 
 private:
 	//Transformations
