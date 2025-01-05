@@ -6,6 +6,7 @@
 #include "Terrain.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Monster.h"
 class Game
 {
 public:
@@ -36,5 +37,6 @@ private:
 	Terrain* terrain;
 	Player* player;
 	Light* light;
+	Monster* monster;
 };
 

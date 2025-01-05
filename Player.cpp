@@ -61,7 +61,6 @@ void Player::ProcessInput(GLFWwindow* windowIn, float deltaTime)
 	// Update camera position
     camera->SetPosition(position + vec3(0.0f, 0.7f, 0.0f));
     vec3 cameraPosition = camera->GetPosition();
-    std::cout << "Set position of camera to {" << cameraPosition.x << ", " << cameraPosition.y << ", " << cameraPosition.z << "}" << std::endl;
 }
 
 Camera* Player::GetCamera() const { return camera; }

@@ -53,6 +53,10 @@ Game::~Game()
 {
     delete instance;
     delete camera;
+    delete terrain;
+    delete player;
+    delete light;
+    delete monster;
     //delete window;
 }
 
@@ -63,6 +67,9 @@ void Game::Run()
 
     // Create Player
     player = new Player(terrain, camera);
+
+    // Create Monster
+    monster = new Monster(terrain);
 
     // Create Light
     light = new Light();
@@ -78,8 +85,13 @@ void Game::Run()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        //Input
+        // Input
         ProcessUserInput(window); //Takes user input
+
+        // Updating objects
+        // Update monster
+        // Move monster towards player
+        monster->Update(player->GetCamera(), deltaTime);
 
         //Rendering
         glClearColor(0.1f, 0.1f, 0.3f, 1.0f); //Colour to display on cleared window
@@ -90,6 +102,9 @@ void Game::Run()
 
         // Drawing terrain
         terrain->Draw(player->GetCamera(), light);
+
+        // Drawing monster
+        monster->Draw(player->GetCamera(), light);
 
         // Refreshing
         glfwSwapBuffers(window); // Swaps the colour buffer
