@@ -145,6 +145,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="shaders\LoadShaders.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
