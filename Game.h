@@ -2,6 +2,7 @@
 #include "Common.h"
 
 // Custom classes
+#include "Signature.h"
 #include "Light.h"
 #include "Terrain.h"
 #include "Camera.h"
@@ -38,5 +39,6 @@ private:
 	Light* light;
 	Monster* monster;
 	Collectable* collectables[5];
+	Signature* signature;
 };
 

@@ -148,6 +148,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Signature.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
@@ -161,6 +162,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Signature.cpp" />
     <ClCompile Include="stbImageLoader.cpp" />
     <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
@@ -169,6 +171,8 @@
     <None Include="shaders\lighting.vert" />
     <None Include="shaders\basic.frag" />
     <None Include="shaders\basic.vert" />
+    <None Include="shaders\signature.frag" />
+    <None Include="shaders\signature.vert" />
     <None Include="shaders\terrain.frag" />
     <None Include="shaders\terrain.vert" />
   </ItemGroup>

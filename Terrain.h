@@ -37,8 +37,7 @@ private:
 	GLuint Buffers[NumBuffers]; // Buffer objects
 
 	
-	Shader shaders; //ShaderInfo shaders[3];
-	//GLuint shaderProgram;
+	Shader shaders;
 
 	GLfloat** vertices;
 	GLfloat* verticesFlat;

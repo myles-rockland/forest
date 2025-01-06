@@ -57,6 +57,9 @@
     <ClInclude Include="Collectable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Signature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -92,6 +95,9 @@
     <ClCompile Include="Collectable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Signature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\lighting.frag">
@@ -110,6 +116,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\basic.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\signature.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\signature.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

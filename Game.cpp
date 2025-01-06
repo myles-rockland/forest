@@ -71,7 +71,7 @@ void Game::Run()
     player = new Player(terrain, camera);
 
     // Create Monster
-    //monster = new Monster(terrain);
+    monster = new Monster(terrain);
 
     // Create Collectables
     for (int i = 0; i < 5; i++)
@@ -82,8 +82,19 @@ void Game::Run()
     // Create Light
     light = new Light();
 
+    // Create Signature
+    signature = new Signature();
+    if (!signature->IsTexturesLoaded())
+    {
+        isRunning = false;
+    }
+
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
+
+    // Enable blending for transparency in textures
+    glEnable(GL_BLEND); 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Render loop
     while (glfwWindowShouldClose(window) == false && isRunning)
@@ -99,7 +110,7 @@ void Game::Run()
         // Updating objects
         // Update monster
         // Move monster towards player
-        //monster->Update(player->GetCamera(), deltaTime);
+        monster->Update(player->GetCamera(), deltaTime);
 
         // Checking if object collected
         for (int i = 0; i < 5; i++)
@@ -130,6 +141,9 @@ void Game::Run()
 
         // Drawing monster
         //monster->Draw(player->GetCamera(), light);
+
+        // Drawing signature
+        signature->Draw(player->GetCamera());
 
         // Refreshing
         glfwSwapBuffers(window); // Swaps the colour buffer
