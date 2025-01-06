@@ -4,6 +4,7 @@
 in vec3 Ambient;
 in vec3 Normal;
 in vec3 FragPos;
+in vec2 TexCoord;
 
 //Colour value to send to next stage
 out vec4 FragColor;
@@ -24,6 +25,7 @@ struct Light {
 };
 uniform Light light; 
 uniform vec3 cameraPos;
+uniform sampler2D textureIn;
 
 void main()
 {
@@ -32,7 +34,7 @@ void main()
 
     // Diffuse lighting
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(light.position - FragPos);
+    vec3 lightDir = normalize(FragPos - light.position);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = material.diffuse * diff * light.diffuse;
 
@@ -44,5 +46,5 @@ void main()
 
     //Set colour of terrain to ambient + diffuse from lighting
     vec3 result = ambient + diffuse + specular;
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 1.0) * texture(textureIn, TexCoord);
 }

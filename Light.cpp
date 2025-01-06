@@ -52,13 +52,6 @@ Light::Light() : shaders("shaders/lighting.vert", "shaders/lighting.frag")
         vertices[i] = cubeVertices[i];
     }
 
-    //Load lighting shaders
-    /*shaders[0] = { GL_VERTEX_SHADER, "shaders/lighting.vert" };
-    shaders[1] = { GL_FRAGMENT_SHADER, "shaders/lighting.frag" };
-    shaders[2] = { GL_NONE, NULL };
-
-    shaderProgram = LoadShaders(shaders);*/
-
     position = vec3(0.0f, 1.0f, 0.0f);
     ambient = vec3(0.2f);
     diffuse = vec3(0.5f);

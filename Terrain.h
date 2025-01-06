@@ -16,6 +16,7 @@ public:
 	int GetRenderDistance() const;
 	GLfloat** GetVertices() const;
 	float GetVerticesOffset() const;
+	bool IsTexturesLoaded() const;
 	//void GenerateCollectables(Player* player);
 	//float GetTerrainBoundary
 private:
@@ -23,6 +24,7 @@ private:
 	void GenerateIndices();
 	// Maybe a function to generate trees? Load models in using Assimp
 	void SetupBuffers();
+	void SetupTextures();
 
 	const int RENDER_DISTANCE; // Render width of the terrain
 	const int MAP_SIZE; // Size of map in x & z space
@@ -35,7 +37,7 @@ private:
 	GLuint VAOs[NumVAOs]; // VAOs
 	enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 }; // Buffer types
 	GLuint Buffers[NumBuffers]; // Buffer objects
-
+	bool texturesLoaded;
 	
 	Shader shaders;
 

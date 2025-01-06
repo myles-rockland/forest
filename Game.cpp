@@ -66,6 +66,10 @@ void Game::Run()
 {
     // Create Terrain
     terrain = new Terrain();
+    if (!terrain->IsTexturesLoaded())
+    {
+        isRunning = false;
+    }
 
     // Create Player
     player = new Player(terrain, camera);
@@ -91,6 +95,9 @@ void Game::Run()
 
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
+
+    // Enable backface culling
+    //glEnable(GL_CULL_FACE);
 
     // Enable blending for transparency in textures
     glEnable(GL_BLEND); 
@@ -140,7 +147,7 @@ void Game::Run()
         }
 
         // Drawing monster
-        monster->Draw(player->GetCamera(), light);
+        //monster->Draw(player->GetCamera(), light);
 
         // Drawing signature
         signature->Draw(player->GetCamera());

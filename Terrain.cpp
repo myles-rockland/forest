@@ -2,7 +2,7 @@
 
 using namespace glm;
 
-Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag")
+Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag") // VERTICES_OFFSET(0.0625f)
 {
 
     GenerateVertices();
@@ -14,6 +14,8 @@ Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), 
     shininess = 2.0f;
 
     SetupBuffers();
+    texturesLoaded = true;
+    SetupTextures();
 }
 
 Terrain::~Terrain()
@@ -36,7 +38,7 @@ void Terrain::GenerateVertices()
     vertices = new GLfloat * [MAP_SIZE];
     for (int i = 0; i < MAP_SIZE; i++)
     {
-        vertices[i] = new GLfloat[9]; // 3 position components, 3 colour components, 3 normal components
+        vertices[i] = new GLfloat[11]; // 3 position components, 3 colour components, 3 normal components, 2 texture coordinate components
         vertices[i][0] = 0.0f;
         vertices[i][1] = 0.0f;
         vertices[i][2] = 0.0f;
@@ -46,6 +48,8 @@ void Terrain::GenerateVertices()
         vertices[i][6] = 0.0f;
         vertices[i][7] = 0.0f;
         vertices[i][8] = 0.0f;
+        vertices[i][9] = 0.0f;
+        vertices[i][10] = 0.0f;
     }
 
     //Positions to start drawing from
@@ -94,8 +98,6 @@ void Terrain::GenerateVertices()
     int biomeSeed = rand() % 100;
     BiomeNoise.SetSeed(biomeSeed);
 
-    //Terrain vertex index
-    int i = 0;
     //Using x & y nested for loop in order to apply noise 2-dimensionally
     for (int y = 0; y < RENDER_DISTANCE; y++)
     {
@@ -122,6 +124,10 @@ void Terrain::GenerateVertices()
                     vertices[index][4] = 1.0f;
                     vertices[index][5] = 0.5f;
                 }
+
+                // Setting texture coordinates
+                vertices[index][9] = (float)x;
+                vertices[index][10] = (float)y;
             }
         }
     }
@@ -148,12 +154,12 @@ void Terrain::GenerateIndices()
     for (int i = 0; i < trianglesPerTerrain - 1; i += 2)
     {
         indices[i][0] = columnIndicesOffset + rowIndicesOffset; //top left
-        indices[i][2] = RENDER_DISTANCE + columnIndicesOffset + rowIndicesOffset; //bottom left
-        indices[i][1] = 1 + columnIndicesOffset + rowIndicesOffset; //top right
+        indices[i][1] = RENDER_DISTANCE + columnIndicesOffset + rowIndicesOffset; //bottom left
+        indices[i][2] = 1 + columnIndicesOffset + rowIndicesOffset; //top right
 
         indices[i + 1][0] = 1 + columnIndicesOffset + rowIndicesOffset; //top right
-        indices[i + 1][2] = RENDER_DISTANCE + columnIndicesOffset + rowIndicesOffset; //bottom left
-        indices[i + 1][1] = 1 + RENDER_DISTANCE + columnIndicesOffset + rowIndicesOffset; //bottom right
+        indices[i + 1][1] = RENDER_DISTANCE + columnIndicesOffset + rowIndicesOffset; //bottom left
+        indices[i + 1][2] = 1 + RENDER_DISTANCE + columnIndicesOffset + rowIndicesOffset; //bottom right
 
         //Shifts x position across for next chunk along grid
         columnIndicesOffset = columnIndicesOffset + 1;
@@ -208,15 +214,15 @@ void Terrain::SetupBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[Triangles]);
     //Allocates buffer memory for the vertices of the 'Triangles' buffer
     // Flatten 2D array
-    verticesFlat = new GLfloat[MAP_SIZE * 9];
+    verticesFlat = new GLfloat[MAP_SIZE * 11];
     for (int i = 0; i < MAP_SIZE; i++)
     {
-        for (int j = 0; j < 9; j++)
+        for (int j = 0; j < 11; j++)
         {
-            verticesFlat[i * 9 + j] = vertices[i][j];
+            verticesFlat[i * 11 + j] = vertices[i][j];
         }
     }
-    glBufferData(GL_ARRAY_BUFFER, MAP_SIZE * 9 * sizeof(GLfloat), verticesFlat, GL_STATIC_DRAW); // terrainVertices // Remember size and pointers... pointer only points to first element, so sizeof will only take size of first element
+    glBufferData(GL_ARRAY_BUFFER, MAP_SIZE * 11 * sizeof(GLfloat), verticesFlat, GL_STATIC_DRAW); // terrainVertices // Remember size and pointers... pointer only points to first element, so sizeof will only take size of first element
 
     //Binding & allocation for indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[Indices]);
@@ -232,27 +238,77 @@ void Terrain::SetupBuffers()
 
     //Allocation & indexing of vertex attribute memory for vertex shader
     //Positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     //Colours
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     //Normals
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    //Textures
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
+    glEnableVertexAttribArray(3);
 
     // Unbind VAO
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Terrain::SetupTextures()
+{
+    //Textures to generate
+    glGenTextures(NumBuffers, Buffers);
+
+    //Binding texture to type 2D texture
+    glBindTexture(GL_TEXTURE_2D, Buffers[Textures]);
+
+    //Selects x axis (S) of texture bound to GL_TEXTURE_2D & sets to repeat beyond normalised coordinates
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    //Selects y axis (T) equivalently
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //Parameters that will be sent & set based on retrieved texture
+    int width, height, colourChannels;
+
+    // Flip loaded textures on y axis
+    stbi_set_flip_vertically_on_load(true);
+
+    //Retrieves texture data
+    unsigned char* data = stbi_load("media/grass.png", &width, &height, &colourChannels, 0);
+    //unsigned char* data = stbi_load("media/pink.jpg", &width, &height, &colourChannels, 0);
+
+    stbi_set_flip_vertically_on_load(false); // Set this back so it doesn't affect other textures in the game
+
+    if (data) //If retrieval successful
+    {
+        //Generation of texture from retrieved texture data
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); // Might need GL_RGBA
+        //Automatically generates all required mipmaps on bound texture
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else //If retrieval unsuccessful
+    {
+        cout << "Failed to load texture.\n";
+        texturesLoaded = false;
+    }
+
+    //Clears retrieved texture from memory
+    stbi_image_free(data);
 }
 
 void Terrain::Draw(Camera* camera, Light* light)
 {
     //Drawing terrain
-    shaders.use(); //glUseProgram(shaderProgram);
+    shaders.use();
 
     //Transformations
     //Model matrix
@@ -300,11 +356,15 @@ void Terrain::Draw(Camera* camera, Light* light)
 
     shaders.setFloat("material.shininess", shininess);
 
+    glBindTexture(GL_TEXTURE_2D, Buffers[Textures]);
     glBindVertexArray(VAOs[0]);
     glDrawElements(GL_TRIANGLES, MAP_SIZE * 32, GL_UNSIGNED_INT, 0);
 
+    // Unbind texture
+    //glBindTexture(GL_TEXTURE_2D, 0);
     // Unbind VAO
     glBindVertexArray(0);
+    
 }
 
 FastNoiseLite Terrain::GetHeightMapNoise() const { return HeightMapNoise; }
@@ -312,3 +372,4 @@ FastNoiseLite Terrain::GetBiomeNoise() const { return BiomeNoise; }
 int Terrain::GetRenderDistance() const { return RENDER_DISTANCE; }
 GLfloat** Terrain::GetVertices() const { return vertices; }
 float Terrain::GetVerticesOffset() const { return VERTICES_OFFSET; }
+bool Terrain::IsTexturesLoaded() const { return texturesLoaded; }

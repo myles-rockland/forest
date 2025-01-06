@@ -71,7 +71,7 @@ void Monster::Draw(Camera* camera, Light* light)
 		angle = -angle; 
 	}
 	// Rotate model by this angle
-	cout << "Rotating by " << angle << " radians" << endl;
+	//cout << "Rotating by " << angle << " radians" << endl;
 	model = rotate(model, angle, vec3(0.0f, 1.0f, 0.0f));
 
 	// View matrix
