@@ -1,5 +1,6 @@
 #include "Collectable.h"
 
+Collectable::Collectable() : player(nullptr), shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/folded_wrinkled_paper/scene.gltf") {}
 Collectable::Collectable(Terrain* terrain, Player* player) : shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/folded_wrinkled_paper/scene.gltf")
 {
 	this->player = player;
@@ -37,11 +38,15 @@ Collectable::~Collectable()
 
 void Collectable::Update()
 {
-	// Get distance between this and player
-	float dist = distance(position, player->GetPosition());
-	if (dist < radius)
+	if (!collected)
 	{
-		collected = true;
+		// Get distance between this and player
+		float dist = distance(position, player->GetPosition());
+		// If player is within radius, this collectable is collected
+		if (dist < radius)
+		{
+			collected = true;
+		}
 	}
 }
 

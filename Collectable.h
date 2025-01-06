@@ -8,6 +8,7 @@ using namespace glm;
 class Collectable
 {
 public:
+	Collectable();
 	Collectable(Terrain* terrain, Player* player);
 	~Collectable();
 	void Update();

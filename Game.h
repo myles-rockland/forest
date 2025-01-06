@@ -37,6 +37,6 @@ private:
 	Player* player;
 	Light* light;
 	Monster* monster;
-	Collectable* collectable;
+	Collectable* collectables[5];
 };
 

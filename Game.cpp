@@ -57,7 +57,8 @@ Game::~Game()
     delete player;
     delete light;
     delete monster;
-    delete collectable;
+    // Need to loop? To delete at every i?
+    delete collectables;
     //delete window;
 }
 
@@ -73,7 +74,10 @@ void Game::Run()
     //monster = new Monster(terrain);
 
     // Create Collectables
-    collectable = new Collectable(terrain, player);
+    for (int i = 0; i < 5; i++)
+    {
+        collectables[i] = new Collectable(terrain, player);
+    }
 
     // Create Light
     light = new Light();
@@ -98,7 +102,11 @@ void Game::Run()
         //monster->Update(player->GetCamera(), deltaTime);
 
         // Checking if object collected
-        collectable->Update();
+        for (int i = 0; i < 5; i++)
+        {
+            Collectable* collectable = collectables[i];
+            collectable->Update();
+        }
 
         //Rendering
         glClearColor(0.1f, 0.1f, 0.3f, 1.0f); //Colour to display on cleared window
@@ -110,10 +118,14 @@ void Game::Run()
         // Drawing terrain
         terrain->Draw(player->GetCamera(), light);
 
-        // Drawing collectable
-        if (!collectable->IsCollected())
+        // Drawing collectables
+        for (int i = 0; i < 5; i++)
         {
-            collectable->Draw(player->GetCamera());
+            Collectable* collectable = collectables[i];
+            if (!collectable->IsCollected())
+            {
+                collectable->Draw(player->GetCamera());
+            }
         }
 
         // Drawing monster
