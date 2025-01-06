@@ -1,7 +1,9 @@
 #pragma once
 #include "Common.h"
+//#include "Player.h"
 #include "Camera.h"
 #include "Light.h"
+//#include "Collectable.h"
 
 class Terrain
 {
@@ -14,6 +16,7 @@ public:
 	int GetRenderDistance() const;
 	GLfloat** GetVertices() const;
 	float GetVerticesOffset() const;
+	//void GenerateCollectables(Player* player);
 	//float GetTerrainBoundary
 private:
 	void GenerateVertices();
@@ -49,4 +52,7 @@ private:
 	vec3 diffuse;
 	vec3 specular;
 	GLfloat shininess;
+
+	//const int NUM_OF_COLLECTABLES;
+	//Collectable* collectables[];
 };

@@ -10,6 +10,7 @@ public:
 	~Player();
 	void ProcessInput(GLFWwindow* windowIn, float deltaTime);
 	Camera* GetCamera() const;
+	vec3 GetPosition() const;
 
 private:
 	vec3 position;

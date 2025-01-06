@@ -6,6 +6,7 @@
 #include "Terrain.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Collectable.h"
 #include "Monster.h"
 class Game
 {
@@ -20,8 +21,6 @@ private:
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	// Processes user input on a particular window
 	void ProcessUserInput(GLFWwindow* WindowIn);
-	// Initialises GLFW
-	int InitialiseGLFW();
 
 	static Game* instance;
 	GLFWwindow* window;
@@ -38,5 +37,6 @@ private:
 	Player* player;
 	Light* light;
 	Monster* monster;
+	Collectable* collectable;
 };
 

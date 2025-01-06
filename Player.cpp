@@ -64,3 +64,4 @@ void Player::ProcessInput(GLFWwindow* windowIn, float deltaTime)
 }
 
 Camera* Player::GetCamera() const { return camera; }
+vec3 Player::GetPosition() const { return position; }

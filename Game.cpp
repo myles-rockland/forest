@@ -69,7 +69,10 @@ void Game::Run()
     player = new Player(terrain, camera);
 
     // Create Monster
-    monster = new Monster(terrain);
+    //monster = new Monster(terrain);
+
+    // Create Collectable (should be done in terrain)
+    collectable = new Collectable(terrain, player, vec3(0.0f, 0.0f, 0.0f));
 
     // Create Light
     light = new Light();
@@ -91,7 +94,7 @@ void Game::Run()
         // Updating objects
         // Update monster
         // Move monster towards player
-        monster->Update(player->GetCamera(), deltaTime);
+        //monster->Update(player->GetCamera(), deltaTime);
 
         //Rendering
         glClearColor(0.1f, 0.1f, 0.3f, 1.0f); //Colour to display on cleared window
@@ -103,8 +106,11 @@ void Game::Run()
         // Drawing terrain
         terrain->Draw(player->GetCamera(), light);
 
+        // Drawing collectable
+        collectable->Draw(player->GetCamera());
+
         // Drawing monster
-        monster->Draw(player->GetCamera(), light);
+        //monster->Draw(player->GetCamera(), light);
 
         // Refreshing
         glfwSwapBuffers(window); // Swaps the colour buffer

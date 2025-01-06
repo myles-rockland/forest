@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collectable.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="FastNoiseLite.h" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Light.cpp" />
@@ -165,8 +167,8 @@
   <ItemGroup>
     <None Include="shaders\lighting.frag" />
     <None Include="shaders\lighting.vert" />
-    <None Include="shaders\monster.frag" />
-    <None Include="shaders\monster.vert" />
+    <None Include="shaders\basic.frag" />
+    <None Include="shaders\basic.vert" />
     <None Include="shaders\terrain.frag" />
     <None Include="shaders\terrain.vert" />
   </ItemGroup>

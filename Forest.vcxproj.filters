@@ -54,6 +54,9 @@
     <ClInclude Include="Monster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Collectable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -86,6 +89,9 @@
     <ClCompile Include="model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Collectable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\lighting.frag">
@@ -100,10 +106,10 @@
     <None Include="shaders\terrain.vert">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\monster.frag">
+    <None Include="shaders\basic.frag">
       <Filter>shaders</Filter>
     </None>
-    <None Include="shaders\monster.vert">
+    <None Include="shaders\basic.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
