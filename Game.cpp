@@ -140,7 +140,7 @@ void Game::Run()
         }
 
         // Drawing monster
-        //monster->Draw(player->GetCamera(), light);
+        monster->Draw(player->GetCamera(), light);
 
         // Drawing signature
         signature->Draw(player->GetCamera());
