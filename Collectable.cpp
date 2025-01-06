@@ -1,12 +1,33 @@
 #include "Collectable.h"
 
-Collectable::Collectable(Terrain* terrain, Player* player, vec3 position) : shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/folded_wrinkled_paper/scene.gltf")
+Collectable::Collectable(Terrain* terrain, Player* player) : shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/folded_wrinkled_paper/scene.gltf")
 {
 	this->player = player;
-	this->position = position;
+
+	std::random_device rd; 
+	std::mt19937 generator(rd());
+
+	float max = terrain->GetVerticesOffset() * terrain->GetRenderDistance();
+	std::uniform_real_distribution<float> distribution(0.0f, max);
+
+	// Assign random position
+	float x = distribution(generator);
+	float z = distribution(generator);
+	
+	// Update monster y position based on terrain heightmap
+	FastNoiseLite heightMapNoise = terrain->GetHeightMapNoise();
+	float y = heightMapNoise.GetNoise(x / terrain->GetVerticesOffset(), z / terrain->GetVerticesOffset());
+	y += 0.3f;
+	
+	// Set position
+	cout << "Position is { " << x << ", " << y << ", " << z << " }" << endl;
+	position = vec3(x, y, z);
 	
 	// Define radius using terrain
 	radius = terrain->GetVerticesOffset() * 10;
+
+	// Default collected to false
+	collected = false;
 }
 
 Collectable::~Collectable()
@@ -14,18 +35,13 @@ Collectable::~Collectable()
 	delete player;
 }
 
-bool Collectable::CheckCollected()
+void Collectable::Update()
 {
 	// Get distance between this and player
 	float dist = distance(position, player->GetPosition());
 	if (dist < radius)
 	{
-		cout << "Collected" << endl;
-		return true;
-	}
-	else
-	{
-		return false;
+		collected = true;
 	}
 }
 
@@ -54,3 +70,5 @@ void Collectable::Draw(Camera* camera)
 
 	this->model.Draw(shaders);
 }
+
+bool Collectable::IsCollected() const { return collected; }

@@ -53,6 +53,5 @@ private:
 	vec3 specular;
 	GLfloat shininess;
 
-	//const int NUM_OF_COLLECTABLES;
-	//Collectable* collectables[];
+	//Collectable collectables[5];
 };

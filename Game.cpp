@@ -57,6 +57,7 @@ Game::~Game()
     delete player;
     delete light;
     delete monster;
+    delete collectable;
     //delete window;
 }
 
@@ -71,8 +72,8 @@ void Game::Run()
     // Create Monster
     //monster = new Monster(terrain);
 
-    // Create Collectable (should be done in terrain)
-    collectable = new Collectable(terrain, player, vec3(0.0f, 0.0f, 0.0f));
+    // Create Collectables
+    collectable = new Collectable(terrain, player);
 
     // Create Light
     light = new Light();
@@ -96,6 +97,9 @@ void Game::Run()
         // Move monster towards player
         //monster->Update(player->GetCamera(), deltaTime);
 
+        // Checking if object collected
+        collectable->Update();
+
         //Rendering
         glClearColor(0.1f, 0.1f, 0.3f, 1.0f); //Colour to display on cleared window
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clears the colour buffer
@@ -107,7 +111,10 @@ void Game::Run()
         terrain->Draw(player->GetCamera(), light);
 
         // Drawing collectable
-        collectable->Draw(player->GetCamera());
+        if (!collectable->IsCollected())
+        {
+            collectable->Draw(player->GetCamera());
+        }
 
         // Drawing monster
         //monster->Draw(player->GetCamera(), light);

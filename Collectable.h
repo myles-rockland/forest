@@ -1,20 +1,23 @@
 #pragma once
 #include "Common.h"
 #include "Player.h"
+#include <random>
 
 using namespace glm;
 
 class Collectable
 {
 public:
-	Collectable(Terrain* terrain, Player* player, vec3 position);
+	Collectable(Terrain* terrain, Player* player);
 	~Collectable();
-	bool CheckCollected();
+	void Update();
+	bool IsCollected() const;
 	void Draw(Camera* camera);
 private:
 	vec3 position;
 	float radius;
 	Player* player;
+	bool collected;
 
 	Shader shaders;
 	Model model;

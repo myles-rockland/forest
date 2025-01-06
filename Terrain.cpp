@@ -2,15 +2,8 @@
 
 using namespace glm;
 
-Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag")//, NUM_OF_COLLECTABLES(5)
+Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag")
 {
-    // GLEW version
-
-	/*shaders[0] = { GL_VERTEX_SHADER, "shaders/terrain.vert" };
-	shaders[1] = { GL_FRAGMENT_SHADER, "shaders/terrain.frag" };
-	shaders[2] = { GL_NONE, NULL };
-
-	shaderProgram = LoadShaders(shaders);*/
 
     GenerateVertices();
     GenerateIndices();
@@ -311,19 +304,6 @@ void Terrain::Draw(Camera* camera, Light* light)
     // Unbind VAO
     glBindVertexArray(0);
 }
-
-//void Terrain::GenerateCollectables(Player* player)
-//{
-//    float x = (float)rand() / (float)(RAND_MAX / VERTICES_OFFSET * RENDER_DISTANCE);
-//    float z = (float)rand() / (float)(RAND_MAX / VERTICES_OFFSET * RENDER_DISTANCE);
-//
-//    //float y = 
-//
-//    for (int i = 0; i < NUM_OF_COLLECTABLES; i++)
-//    {
-//        collectables[i] = new Collectable(this, player, vec3(0.0f));
-//    }
-//}
 
 FastNoiseLite Terrain::GetHeightMapNoise() const { return HeightMapNoise; }
 FastNoiseLite Terrain::GetBiomeNoise() const { return BiomeNoise; }
