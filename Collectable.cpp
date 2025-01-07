@@ -5,13 +5,15 @@ Collectable::Collectable(Terrain* terrain, Player* player) : shaders("shaders/ba
 {
 	this->player = player;
 
-	std::random_device rd; 
+	// Create generator for use in distribution
+	std::random_device rd;
 	std::mt19937 generator(rd());
 
+	// Create distribution 
 	float max = terrain->GetVerticesOffset() * terrain->GetRenderDistance();
 	std::uniform_real_distribution<float> distribution(0.0f, max);
 
-	// Assign random position
+	// Assign random position using distribution
 	float x = distribution(generator);
 	float z = distribution(generator);
 	
@@ -21,7 +23,6 @@ Collectable::Collectable(Terrain* terrain, Player* player) : shaders("shaders/ba
 	y += 0.3f;
 	
 	// Set position
-	cout << "Position is { " << x << ", " << y << ", " << z << " }" << endl;
 	position = vec3(x, y, z);
 	
 	// Define radius using terrain

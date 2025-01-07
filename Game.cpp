@@ -83,6 +83,12 @@ void Game::Run()
         collectables[i] = new Collectable(terrain, player);
     }
 
+    // Create Trees
+    for (int i = 0; i < 10; i++)
+    {
+        trees[i] = new Tree(terrain);
+    }
+
     // Create Light
     light = new Light();
 
@@ -144,6 +150,13 @@ void Game::Run()
             {
                 collectable->Draw(player->GetCamera());
             }
+        }
+
+        // Drawing trees
+        for (int i = 0; i < 10; i++)
+        {
+            Tree* tree = trees[i];
+            tree->Draw(player->GetCamera());
         }
 
         // Drawing monster

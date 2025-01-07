@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Collectable.h"
 #include "Monster.h"
+#include "Tree.h"
 class Game
 {
 public:
@@ -26,6 +27,7 @@ private:
 	static Game* instance;
 	GLFWwindow* window;
 	bool isRunning;
+
 	//Time
 	//Time change
 	float deltaTime;
@@ -39,6 +41,7 @@ private:
 	Light* light;
 	Monster* monster;
 	Collectable* collectables[5];
+	Tree* trees[10];
 	Signature* signature;
 };
 

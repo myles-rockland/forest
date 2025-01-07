@@ -278,8 +278,6 @@ void Terrain::SetupTextures()
     glGenTextures(NumBuffers, Buffers);
 
     //Binding texture to type 2D texture
-    cout << Buffers[Textures1] << endl;
-    //glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
     glBindTexture(GL_TEXTURE_2D, Buffers[Textures1]);
 
     //Selects x axis (S) of texture bound to GL_TEXTURE_2D & sets to repeat beyond normalised coordinates
@@ -314,12 +312,8 @@ void Terrain::SetupTextures()
     stbi_image_free(data);
 
     // TEXTURE 2
-    //Textures to generate
-    //glGenTextures(NumBuffers, Buffers);
 
     //Binding texture to type 2D texture
-    cout << Buffers[Textures2] << endl;
-    //glActiveTexture(GL_TEXTURE1); // activate the texture unit first before binding texture
     glBindTexture(GL_TEXTURE_2D, Buffers[Textures2]);
 
     //Selects x axis (S) of texture bound to GL_TEXTURE_2D & sets to repeat beyond normalised coordinates
