@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
+#include "Camera.h"
 #include "Terrain.h"
-#include "Player.h"
 
 using namespace glm;
 

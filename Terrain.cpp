@@ -2,7 +2,7 @@
 
 using namespace glm;
 
-Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag") // VERTICES_OFFSET(0.0625f)
+Terrain::Terrain() : vertices(nullptr), indices(nullptr), RENDER_DISTANCE(128), MAP_SIZE(RENDER_DISTANCE * RENDER_DISTANCE), trianglesPerSquare(2), squaresPerRow(RENDER_DISTANCE-1), trianglesPerTerrain(squaresPerRow * squaresPerRow * trianglesPerSquare), VERTICES_OFFSET(0.0625f), shaders("shaders/terrain.vert", "shaders/terrain.frag"), GRASS_BIOME_VALUE(-0.75f), MIX_BIOME_VALUE(-0.6f) // VERTICES_OFFSET(0.0625f)
 {
 
     GenerateVertices();
@@ -87,7 +87,6 @@ void Terrain::GenerateVertices()
     //Sets the noise scale
     HeightMapNoise.SetFrequency(0.05f);
     //Generates a random seed between integers 0 & 100
-    srand(time(0)); // Seeding the rand() function using time
     int terrainSeed = rand() % 100;
     //Sets seed for noise
     HeightMapNoise.SetSeed(terrainSeed);
@@ -95,11 +94,10 @@ void Terrain::GenerateVertices()
     //Biome noise
     BiomeNoise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
     BiomeNoise.SetFrequency(0.05f);
-    srand(time(0));
     int biomeSeed = rand() % 100;
     BiomeNoise.SetSeed(biomeSeed);
 
-    //Using x & y nested for loop in order to apply noise 2-dimensionally, as well as texture coordinates
+    //Using x & y nested for loop in order to apply noise 2-dimensionally, as well as generate texture coordinates
     for (int y = 0; y < RENDER_DISTANCE; y++)
     {
         for (int x = 0; x < RENDER_DISTANCE; x++)
@@ -113,25 +111,28 @@ void Terrain::GenerateVertices()
                 //Retrieval of biome to set
                 float biomeValue = BiomeNoise.GetNoise((float)x, (float)y);
 
-                if (biomeValue <= -0.75f) //Plains
+                if (biomeValue <= GRASS_BIOME_VALUE) // Grass biome
                 {
                     vertices[index][3] = 0.0f;
                     vertices[index][4] = 0.75f;
                     vertices[index][5] = 0.25f;
+
                     vertices[index][11] = 0.0f; // 0% mix, so 100% texture 1, 0% texture 2
                 }
-                else if (biomeValue <= -0.6f) //Mix
+                else if (biomeValue <= MIX_BIOME_VALUE) // Mix biome
                 {
                     vertices[index][3] = 0.5f;
                     vertices[index][4] = 0.875f;
                     vertices[index][5] = 0.375f;
+
                     vertices[index][11] = 0.5f; // 50% mix, so 50% texture 1, 50% texture 2
                 }
-                else //Desert
+                else // Dirt path biome (to look like path where people have walked)
                 {
                     vertices[index][3] = 1.0f;
                     vertices[index][4] = 1.0f;
                     vertices[index][5] = 0.5f;
+
                     vertices[index][11] = 1.0f; // 100% mix, so 0% texture 1, 100% texture 2
                 }
 
@@ -422,6 +423,9 @@ void Terrain::Draw(Camera* camera, Light* light)
 FastNoiseLite Terrain::GetHeightMapNoise() const { return HeightMapNoise; }
 FastNoiseLite Terrain::GetBiomeNoise() const { return BiomeNoise; }
 int Terrain::GetRenderDistance() const { return RENDER_DISTANCE; }
+int Terrain::GetMapSize() const { return MAP_SIZE; }
 GLfloat** Terrain::GetVertices() const { return vertices; }
 float Terrain::GetVerticesOffset() const { return VERTICES_OFFSET; }
 bool Terrain::IsTexturesLoaded() const { return texturesLoaded; }
+float Terrain::GetGrassBiomeValue() const { return GRASS_BIOME_VALUE; }
+float Terrain::GetMixBiomeValue() const { return MIX_BIOME_VALUE; }

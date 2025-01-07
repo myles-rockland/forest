@@ -3,7 +3,6 @@
 //#include "Player.h"
 #include "Camera.h"
 #include "Light.h"
-//#include "Collectable.h"
 
 class Terrain
 {
@@ -14,9 +13,12 @@ public:
 	FastNoiseLite GetHeightMapNoise() const;
 	FastNoiseLite GetBiomeNoise() const;
 	int GetRenderDistance() const;
+	int GetMapSize() const;
 	GLfloat** GetVertices() const;
 	float GetVerticesOffset() const;
 	bool IsTexturesLoaded() const;
+	float GetGrassBiomeValue() const;
+	float GetMixBiomeValue() const;
 	//void GenerateCollectables(Player* player);
 	//float GetTerrainBoundary
 private:
@@ -32,6 +34,8 @@ private:
 	const int squaresPerRow; // Amount of squares/chunks per row
 	const int trianglesPerTerrain; // Amount of triangles in terrain
 	const float VERTICES_OFFSET;
+	const float GRASS_BIOME_VALUE;
+	const float MIX_BIOME_VALUE;
 
 	enum VAO_IDs { Triangles, Indices, Colours, Textures1, Textures2, NumVAOs = 2 }; // VAO vertex attribute positions in correspondence to vertex attribute type
 	GLuint VAOs[NumVAOs]; // VAOs
@@ -53,6 +57,4 @@ private:
 	vec3 diffuse;
 	vec3 specular;
 	GLfloat shininess;
-
-	//Collectable collectables[5];
 };

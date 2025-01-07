@@ -47,6 +47,7 @@ Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true)
     //Sets the mouse_callback() function as the callback for the mouse movement event
     glfwSetCursorPosCallback(window, mouse_callback);
 
+    srand(time(0));
 }
 
 Game::~Game()
@@ -57,8 +58,8 @@ Game::~Game()
     delete player;
     delete light;
     delete monster;
-    // Need to loop? To delete at every i?
     delete[] collectables;
+    delete[] trees;
     //delete window;
 }
 
@@ -152,15 +153,14 @@ void Game::Run()
             }
         }
 
-        // Drawing trees
-        for (int i = 0; i < 10; i++)
-        {
-            Tree* tree = trees[i];
-            tree->Draw(player->GetCamera());
-        }
-
         // Drawing monster
         //monster->Draw(player->GetCamera(), light);
+
+        // Draw trees
+        for (int i = 0; i < 10; i++)
+        {
+            trees[i]->Draw(player->GetCamera());
+        }
 
         // Drawing signature
         signature->Draw(player->GetCamera());
