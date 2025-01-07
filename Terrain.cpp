@@ -416,10 +416,12 @@ void Terrain::Draw(Camera* camera, Light* light)
     glBindVertexArray(VAOs[0]);
     glDrawElements(GL_TRIANGLES, MAP_SIZE * 32, GL_UNSIGNED_INT, 0);
 
-    // Unbind texture
-    //glBindTexture(GL_TEXTURE_2D, 0);
     // Unbind VAO
     glBindVertexArray(0);
+    // Unbind texture
+    glBindTexture(GL_TEXTURE_2D, 0);
+    // Reset active texture unit to 0
+    glActiveTexture(GL_TEXTURE0);
     
 }
 

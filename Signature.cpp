@@ -65,6 +65,8 @@ void Signature::SetupBuffers()
 
     // Unbind VAO
     glBindVertexArray(0);
+    // Unbind Textures
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Signature::SetupTextures()
@@ -114,8 +116,8 @@ void Signature::Draw(Camera* camera)
     glBindVertexArray(VAOs[0]);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 bool Signature::IsTexturesLoaded() const { return texturesLoaded; }
