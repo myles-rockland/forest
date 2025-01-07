@@ -5,6 +5,7 @@ in vec3 Ambient;
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoord;
+in float MixFactor;
 
 //Colour value to send to next stage
 out vec4 FragColor;
@@ -25,7 +26,8 @@ struct Light {
 };
 uniform Light light; 
 uniform vec3 cameraPos;
-uniform sampler2D textureIn;
+uniform sampler2D texture1;
+uniform sampler2D texture2;
 
 void main()
 {
@@ -46,5 +48,6 @@ void main()
 
     //Set colour of terrain to ambient + diffuse from lighting
     vec3 result = ambient + diffuse + specular;
-    FragColor = vec4(result, 1.0) * texture(textureIn, TexCoord);
+    //FragColor = vec4(result, 1.0) * texture(texture1, TexCoord);
+    FragColor = vec4(result, 1.0) *  mix(texture(texture1, TexCoord), texture(texture2, TexCoord), MixFactor);
 }

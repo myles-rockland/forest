@@ -4,12 +4,14 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 colourVertex;
 layout (location = 2) in vec3 aNormal;
 layout (location = 3) in vec2 aTexCoord;
+layout (location = 4) in float aMixFactor;
 
 //Colour to send
 out vec3 Ambient;
 out vec3 Normal;
 out vec3 FragPos;
 out vec2 TexCoord;
+out float MixFactor;
 
 //Model-View-Projection Matrix
 struct Material {
@@ -35,4 +37,5 @@ void main()
     Ambient = colourVertex * material.ambient;
 
     TexCoord = aTexCoord;
+    MixFactor = aMixFactor;
 }

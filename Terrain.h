@@ -33,9 +33,9 @@ private:
 	const int trianglesPerTerrain; // Amount of triangles in terrain
 	const float VERTICES_OFFSET;
 
-	enum VAO_IDs { Triangles, Indices, Colours, Textures, NumVAOs = 2 }; // VAO vertex attribute positions in correspondence to vertex attribute type
+	enum VAO_IDs { Triangles, Indices, Colours, Textures1, Textures2, NumVAOs = 2 }; // VAO vertex attribute positions in correspondence to vertex attribute type
 	GLuint VAOs[NumVAOs]; // VAOs
-	enum Buffer_IDs { ArrayBuffer, NumBuffers = 4 }; // Buffer types
+	enum Buffer_IDs { ArrayBuffer, NumBuffers = 5 }; // Buffer types
 	GLuint Buffers[NumBuffers]; // Buffer objects
 	bool texturesLoaded;
 	

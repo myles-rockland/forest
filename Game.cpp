@@ -58,7 +58,7 @@ Game::~Game()
     delete light;
     delete monster;
     // Need to loop? To delete at every i?
-    delete collectables;
+    delete[] collectables;
     //delete window;
 }
 
