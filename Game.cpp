@@ -82,7 +82,7 @@ void Game::Run()
     }
 
     // Create Player
-    player = new Player(terrain, camera);
+    player = new Player(terrain, camera, soundEngine);
 
     // Create Monster
     monster = new Monster(terrain);
@@ -222,6 +222,6 @@ void Game::ProcessUserInput(GLFWwindow* windowIn)
 
     if (player)
     {
-        player->ProcessInput(windowIn, deltaTime);
+        player->ProcessInput(windowIn, deltaTime, soundEngine);
     }
 }

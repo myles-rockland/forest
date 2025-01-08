@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Terrain* terrain, Camera* camera) : terrain(terrain)
+Player::Player(Terrain* terrain, Camera* camera, irrklang::ISoundEngine* engine) : terrain(terrain)
 {
 	// Spawn the player in middle of terrain
 	int middleIndex = terrain->GetMapSize() / 2 - terrain->GetRenderDistance() / 2;
@@ -14,14 +14,18 @@ Player::Player(Terrain* terrain, Camera* camera) : terrain(terrain)
     movementSpeed = 1.0f;
 
 	this->camera = camera;
+
+    walkingSound = engine->play3D("./audio/walking_on_leaves.ogg", irrklang::vec3df(position.x, position.y, position.z), true, true, true);
 }
 
 Player::~Player()
 {
 	delete camera;
+    if (walkingSound)
+        walkingSound->drop();
 }
 
-void Player::ProcessInput(GLFWwindow* windowIn, float deltaTime)
+void Player::ProcessInput(GLFWwindow* windowIn, float deltaTime, irrklang::ISoundEngine* engine)
 {
 	// Move player
     const float speed = movementSpeed * deltaTime;
@@ -32,6 +36,10 @@ void Player::ProcessInput(GLFWwindow* windowIn, float deltaTime)
         dir.y = 0.0f;
         dir = normalize(dir);
         position += speed * dir;
+        // Set sound position
+        walkingSound->setPosition(irrklang::vec3df(position.x, position.y, position.z));
+        // Play walking sound
+        walkingSound->setIsPaused(false);
     }
     if (glfwGetKey(windowIn, GLFW_KEY_S) == GLFW_PRESS)
     {
@@ -39,14 +47,33 @@ void Player::ProcessInput(GLFWwindow* windowIn, float deltaTime)
         dir.y = 0.0f;
         dir = normalize(dir);
         position -= speed * dir;
+        // Set sound position
+        walkingSound->setPosition(irrklang::vec3df(position.x, position.y, position.z));
+        // Play walking sound
+        walkingSound->setIsPaused(false);
     }
     if (glfwGetKey(windowIn, GLFW_KEY_A) == GLFW_PRESS)
     {
         position -= normalize(cross(camera->GetFront(), camera->GetUp())) * speed;
+        // Set sound position
+        walkingSound->setPosition(irrklang::vec3df(position.x, position.y, position.z));
+        // Play walking sound
+        walkingSound->setIsPaused(false);
     }
     if (glfwGetKey(windowIn, GLFW_KEY_D) == GLFW_PRESS)
     {
         position += normalize(cross(camera->GetFront(), camera->GetUp())) * speed;
+        // Set sound position
+        walkingSound->setPosition(irrklang::vec3df(position.x, position.y, position.z));
+        // Play walking sound
+        walkingSound->setIsPaused(false);
+    }
+    if (glfwGetKey(windowIn, GLFW_KEY_W) != GLFW_PRESS
+        && glfwGetKey(windowIn, GLFW_KEY_A) != GLFW_PRESS
+        && glfwGetKey(windowIn, GLFW_KEY_S) != GLFW_PRESS
+        && glfwGetKey(windowIn, GLFW_KEY_D) != GLFW_PRESS)
+    {
+        walkingSound->setIsPaused(true);
     }
 
     // Clamp player x position between 0 and terrain max

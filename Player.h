@@ -6,9 +6,9 @@
 class Player
 {
 public:
-	Player(Terrain* terrain, Camera* camera);
+	Player(Terrain* terrain, Camera* camera, irrklang::ISoundEngine* engine);
 	~Player();
-	void ProcessInput(GLFWwindow* windowIn, float deltaTime);
+	void ProcessInput(GLFWwindow* windowIn, float deltaTime, irrklang::ISoundEngine* engine);
 	Camera* GetCamera() const;
 	vec3 GetPosition() const;
 
@@ -16,6 +16,7 @@ private:
 	vec3 position;
 	float movementSpeed;
 	Terrain* terrain;
+	irrklang::ISound* walkingSound;
 
 	Camera* camera;
 };
