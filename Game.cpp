@@ -69,7 +69,7 @@ Game::~Game()
     delete monster;
     delete[] collectables;
     delete[] trees;
-    //delete window;
+    soundEngine->drop(); // Delete sound engine
 }
 
 void Game::Run()
@@ -108,6 +108,9 @@ void Game::Run()
     {
         isRunning = false;
     }
+
+    // Play background music looped
+    soundEngine->play2D("./audio/ghostly_presence.ogg", true);
 
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);

@@ -121,6 +121,7 @@
     <PostBuildEvent>
       <Command>xcopy /y /i /e "$(ProjectDir)media" "$(OutDir)media\"
 xcopy /y /i /e "$(ProjectDir)shaders" "$(OutDir)shaders\"
+xcopy /y /i /e "$(ProjectDir)audio" "$(OutDir)audio\"
 xcopy /y /i "$(ProjectDir)assimp-vc143-mt.dll" "$(OutDir)"
 xcopy /y /i "$(ProjectDir)glew32.dll" "$(OutDir)"
 xcopy /y /i "$(ProjectDir)irrKlang\bin\winx64-visualStudio\irrKlang.dll" "$(OutDir)"</Command>
@@ -145,6 +146,7 @@ xcopy /y /i "$(ProjectDir)irrKlang\bin\winx64-visualStudio\irrKlang.dll" "$(OutD
     <PostBuildEvent>
       <Command>xcopy /y /i /e "$(ProjectDir)media" "$(OutDir)media\"
 xcopy /y /i /e "$(ProjectDir)shaders" "$(OutDir)shaders\"
+xcopy /y /i /e "$(ProjectDir)audio" "$(OutDir)audio\"
 xcopy /y /i "$(ProjectDir)assimp-vc143-mt.dll" "$(OutDir)"
 xcopy /y /i "$(ProjectDir)glew32.dll" "$(OutDir)"
 xcopy /y /i "$(ProjectDir)irrKlang\bin\winx64-visualStudio\irrKlang.dll" "$(OutDir)"</Command>
