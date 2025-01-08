@@ -13,6 +13,7 @@ Forest Game is a horror game about collecting pages.
 - Monster model and textures - https://www.mixamo.com/#/?page=1&query=parasite&type=Character
 - Grass texture - https://opengameart.org/node/21686
 - Dirty Grass texture - https://opengameart.org/content/4k-seamless-grass-dirt-ground-texture-with-all-shader-maps-dirtygrassseamlesscolorjpg
+- Tree model and textures - https://sketchfab.com/3d-models/pine-tree-e52769d653cd4e52a4acff3041961e65#download
 
 ## YouTube Video
 YouTube Video: [insert some youtube video]

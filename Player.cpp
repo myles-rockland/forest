@@ -3,13 +3,15 @@
 Player::Player(Terrain* terrain, Camera* camera) : terrain(terrain)
 {
 	// Spawn the player in middle of terrain
-	int middleIndex = terrain->GetRenderDistance() / 2;
+	int middleIndex = terrain->GetMapSize() / 2 - terrain->GetRenderDistance() / 2;
     GLfloat** vertices = terrain->GetVertices();
     GLfloat* middleVertex = vertices[middleIndex];
     float x = middleVertex[0];
     float y = middleVertex[1];
     float z = middleVertex[2];
 	position = vec3(x, y, z);
+
+    cout << "Player Position is { " << position.x << ", " << position.y << ", " << position.z << " }" << endl;
 
     movementSpeed = 1.0f;
 

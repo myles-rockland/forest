@@ -1,6 +1,7 @@
+#include "Terrain.h"
 #include "Light.h"
 
-Light::Light() : shaders("shaders/lighting.vert", "shaders/lighting.frag")
+Light::Light(Terrain* terrain) : shaders("shaders/lighting.vert", "shaders/lighting.frag")
 {
     // Set vertices (cube)
     float cubeVertices[] = {
@@ -52,10 +53,23 @@ Light::Light() : shaders("shaders/lighting.vert", "shaders/lighting.frag")
         vertices[i] = cubeVertices[i];
     }
 
-    position = vec3(0.0f, 1.0f, 0.0f);
+    //position = vec3(0.0f, 1.0f, 0.0f);
     ambient = vec3(0.2f);
     diffuse = vec3(0.5f);
     specular = vec3(1.0f);
+
+    // Get terrain vertices
+    GLfloat** vertices = terrain->GetVertices();
+    // Get middle vertex
+    GLfloat* middleVertex = vertices[terrain->GetMapSize() / 2 - terrain->GetRenderDistance() / 2];
+    // Set position to middle vertex
+    origin = vec3(middleVertex[0], 0.0f, middleVertex[2]);
+    position = vec3(middleVertex[0], 0.0f, middleVertex[2]);
+    cout << "Light Position is { " << position.x << ", " << position.y << ", " << position.z << " }" << endl;
+    // Radius needs to be based on terrain render distance...
+    radius = terrain->GetVerticesOffset() * terrain->GetRenderDistance();
+    //radius = terrain->GetRenderDistance();
+    movementSpeed = 0.1f;
 
     SetupBuffers();
 }
@@ -76,9 +90,16 @@ void Light::SetupBuffers()
     glBindVertexArray(0);
 }
 
+void Light::Update(Terrain* terrain)
+{
+    // Rotate light around origin at centre of terrain
+    position.x = origin.x + sin(glfwGetTime() * movementSpeed) * radius;
+    position.y = origin.y + cos(glfwGetTime() * movementSpeed) * radius;
+}
+
 void Light::Draw(Camera* camera)
 {
-    shaders.use(); //glUseProgram(shaderProgram);
+    shaders.use();
 
     // Model matrix
     mat4 model = glm::mat4(1.0f);

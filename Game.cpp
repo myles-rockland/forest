@@ -91,7 +91,7 @@ void Game::Run()
     }
 
     // Create Light
-    light = new Light();
+    light = new Light(terrain);
 
     // Create Signature
     signature = new Signature();
@@ -125,6 +125,9 @@ void Game::Run()
         // Update monster
         // Move monster towards player
         monster->Update(player->GetCamera(), deltaTime);
+
+        // Update light
+        light->Update(terrain);
 
         // Checking if object collected
         for (int i = 0; i < 5; i++)
