@@ -5,26 +5,6 @@ Collectable::Collectable(Terrain* terrain, Player* player) : shaders("shaders/ba
 {
 	this->player = player;
 
-	//// Create generator for use in distribution
-	//std::random_device rd;
-	//std::mt19937 generator(rd());
-
-	//// Create distribution 
-	//float max = terrain->GetVerticesOffset() * terrain->GetRenderDistance();
-	//std::uniform_real_distribution<float> distribution(0.0f, max);
-
-	//// Assign random position using distribution
-	//float x = distribution(generator);
-	//float z = distribution(generator);
-	//
-	//// Update monster y position based on terrain heightmap
-	//FastNoiseLite heightMapNoise = terrain->GetHeightMapNoise();
-	//float y = heightMapNoise.GetNoise(x / terrain->GetVerticesOffset(), z / terrain->GetVerticesOffset());
-	//y += 0.3f;
-	//
-	//// Set position
-	//position = vec3(x, y, z);
-	
 	// Generate two random numbers within terrain render distance
 	int x = rand() % terrain->GetRenderDistance();
 	int y = rand() % terrain->GetRenderDistance();

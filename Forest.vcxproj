@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Public\OpenGL\include;C:\Users\Public\Assimp\Binaries\include;C:\Users\Public\Assimp\Source\assimp\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Public\OpenGL\lib;C:\Users\Public\Assimp\Binaries\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Public\OpenGL\include;C:\Users\Public\Assimp\Binaries\include;C:\Users\Public\Assimp\Source\assimp\include;$(SolutionDir)irrKlang\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Public\OpenGL\lib;C:\Users\Public\Assimp\Binaries\lib\Release;$(SolutionDir)irrKlang\lib\Winx64-visualStudio;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Public\OpenGL\include;C:\Users\Public\Assimp\Binaries\include;C:\Users\Public\Assimp\Source\assimp\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Public\OpenGL\lib;C:\Users\Public\Assimp\Binaries\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Public\OpenGL\include;C:\Users\Public\Assimp\Binaries\include;C:\Users\Public\Assimp\Source\assimp\include;$(SolutionDir)irrKlang\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Public\OpenGL\lib;C:\Users\Public\Assimp\Binaries\lib\Release;$(SolutionDir)irrKlang\lib\Winx64-visualStudio;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,8 +116,15 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;glew32s.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;glew32s.lib;assimp-vc143-mt.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /i /e "$(ProjectDir)media" "$(OutDir)media\"
+xcopy /y /i /e "$(ProjectDir)shaders" "$(OutDir)shaders\"
+xcopy /y /i "$(ProjectDir)assimp-vc143-mt.dll" "$(OutDir)"
+xcopy /y /i "$(ProjectDir)glew32.dll" "$(OutDir)"
+xcopy /y /i "$(ProjectDir)irrKlang\bin\winx64-visualStudio\irrKlang.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -133,8 +140,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;glew32s.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;glew32s.lib;assimp-vc143-mt.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /i /e "$(ProjectDir)media" "$(OutDir)media\"
+xcopy /y /i /e "$(ProjectDir)shaders" "$(OutDir)shaders\"
+xcopy /y /i "$(ProjectDir)assimp-vc143-mt.dll" "$(OutDir)"
+xcopy /y /i "$(ProjectDir)glew32.dll" "$(OutDir)"
+xcopy /y /i "$(ProjectDir)irrKlang\bin\winx64-visualStudio\irrKlang.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

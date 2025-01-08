@@ -3,11 +3,20 @@ using namespace std;
 
 Game* Game::instance = nullptr;
 
-Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true)
+Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true), camera(nullptr), terrain(nullptr), player(nullptr), light(nullptr), monster(nullptr), signature(nullptr)
 {
     instance = this;
 
     camera = new Camera();
+
+    // Initialise irrKlang system
+    soundEngine = irrklang::createIrrKlangDevice();
+    // Error handling to check if irrKlang has been susccessfully initialised
+    if (!soundEngine)
+    {
+        isRunning = false;
+        return;
+    }
 
     //Initialisation of GLFW
     glfwInit();
@@ -15,7 +24,7 @@ Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true)
     //Initialisation of 'GLFWwindow' object
     window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Forest Game", NULL, NULL);
 
-    //Checks if window has been successfully instantiated
+    // Error handling to check if window has been successfully instantiated
     if (window == NULL)
     {
         cout << "GLFW Window did not instantiate\n";
@@ -30,7 +39,7 @@ Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true)
     //Binds OpenGL to window
     glfwMakeContextCurrent(window);
 
-    // Initialisation of GLAD
+    // Initialisation of GLAD and error handling if it fails
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         cout << "GLAD failed to initialise" << endl;
@@ -125,6 +134,11 @@ void Game::Run()
         // Update monster
         // Move monster towards player
         monster->Update(player->GetCamera(), deltaTime);
+        // Check if monster caught player
+        if (monster->GetCaughtPlayer())
+        {
+            isRunning = false;
+        }
 
         // Update light
         light->Update(terrain);

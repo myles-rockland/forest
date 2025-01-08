@@ -30,4 +30,7 @@
 // Random
 #include <random>
 
+// irrKlang
+#include <irrKlang.h>
+
 #include "Constants.h"

@@ -25,6 +25,7 @@ private:
 	void ProcessUserInput(GLFWwindow* WindowIn);
 
 	static Game* instance;
+	irrklang::ISoundEngine* soundEngine;
 	GLFWwindow* window;
 	bool isRunning;
 

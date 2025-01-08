@@ -11,8 +11,6 @@ Player::Player(Terrain* terrain, Camera* camera) : terrain(terrain)
     float z = middleVertex[2];
 	position = vec3(x, y, z);
 
-    cout << "Player Position is { " << position.x << ", " << position.y << ", " << position.z << " }" << endl;
-
     movementSpeed = 1.0f;
 
 	this->camera = camera;

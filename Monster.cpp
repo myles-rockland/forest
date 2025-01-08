@@ -4,6 +4,8 @@ Monster::Monster(Terrain* terrain) : movementSpeed(2.0f), terrain(terrain), shad
 {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	forward = vec3(0.0f, 0.0f, 1.0f);
+	radius = terrain->GetVerticesOffset() * 15;
+	caughtPlayer = false;
 }
 
 Monster::~Monster()
@@ -39,9 +41,14 @@ void Monster::Update(Camera* camera, float deltaTime)
 		position.y = heightMapNoise.GetNoise(position.x / terrain->GetVerticesOffset(), position.z / terrain->GetVerticesOffset()); // Need to divide by vertices offset due to how terrain is generated
 	}
 
-	// Implement a check to see if the monster caught you
-	// Calculate squared magnitude/length
-	// If length is less than... some value, game over
+	// Get distance between this and player
+	float dist = distance(position, camera->GetPosition());
+	// If player is within radius, the player was caught, i.e. game over
+	if (dist < radius)
+	{
+		caughtPlayer = true;
+		cout << "Player was caught! Game over!" << endl;
+	}
 }
 
 void Monster::Draw(Camera* camera, Light* light)
@@ -86,3 +93,5 @@ void Monster::Draw(Camera* camera, Light* light)
 
 	this->model.Draw(shaders);
 }
+
+bool Monster::GetCaughtPlayer() const { return caughtPlayer; }
