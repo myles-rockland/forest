@@ -15,6 +15,7 @@ Forest Game is a horror game about collecting pages.
 - Dirty Grass texture - https://opengameart.org/content/4k-seamless-grass-dirt-ground-texture-with-all-shader-maps-dirtygrassseamlesscolorjpg
 - Tree model and textures - https://sketchfab.com/3d-models/pine-tree-e52769d653cd4e52a4acff3041961e65#download
 - Ghostly Presence music (Website: Bensound, Artist: FoePound, License code: ZCM0KIEXOOQO8DYV) - https://www.bensound.com/royalty-free-music/track/ghostly-presence-creepy-dark
+- Paper Grab sfx - https://pixabay.com/sound-effects/paper-grab-259214/
 
 ## YouTube Video
 YouTube Video: [insert some youtube video]

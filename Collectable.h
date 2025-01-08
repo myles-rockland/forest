@@ -10,7 +10,7 @@ public:
 	Collectable();
 	Collectable(Terrain* terrain, Player* player);
 	~Collectable();
-	void Update();
+	void Update(irrklang::ISoundEngine* engine);
 	bool IsCollected() const;
 	void Draw(Camera* camera);
 private:

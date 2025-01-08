@@ -1,4 +1,5 @@
 #include "Collectable.h"
+#include "Game.h"
 
 Collectable::Collectable() : player(nullptr), shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/folded_wrinkled_paper/scene.gltf") {}
 Collectable::Collectable(Terrain* terrain, Player* player) : shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/folded_wrinkled_paper/scene.gltf")
@@ -43,7 +44,7 @@ Collectable::~Collectable()
 	delete player;
 }
 
-void Collectable::Update()
+void Collectable::Update(irrklang::ISoundEngine* engine)
 {
 	if (!collected)
 	{
@@ -53,6 +54,7 @@ void Collectable::Update()
 		if (dist < radius)
 		{
 			collected = true;
+			engine->play3D("./audio/paper_grab.ogg", irrklang::vec3df(position.x, position.y, position.z));
 		}
 	}
 }

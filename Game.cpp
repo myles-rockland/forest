@@ -132,10 +132,13 @@ void Game::Run()
 
         // Input
         ProcessUserInput(window); //Takes user input
+        // Update listener position for irrklang
+        vec3 cameraPosition = camera->GetPosition();
+        vec3 cameraForward = camera->GetFront();
+        soundEngine->setListenerPosition(irrklang::vec3df(cameraPosition.x, cameraPosition.y, cameraPosition.z), irrklang::vec3df(cameraForward.x, cameraForward.y, cameraForward.z));
 
         // Updating objects
         // Update monster
-        // Move monster towards player
         monster->Update(player->GetCamera(), deltaTime);
         // Check if monster caught player
         if (monster->GetCaughtPlayer())
@@ -146,11 +149,11 @@ void Game::Run()
         // Update light
         light->Update(terrain);
 
-        // Checking if object collected
+        // Update collectables
         for (int i = 0; i < 5; i++)
         {
             Collectable* collectable = collectables[i];
-            collectable->Update();
+            collectable->Update(soundEngine);
         }
 
         //Rendering
