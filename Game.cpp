@@ -110,7 +110,7 @@ void Game::Run()
     glEnable(GL_BLEND); 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //Render loop
+    // Input/Update/Render Game loop
     while (glfwWindowShouldClose(window) == false && isRunning)
     {
         //Time
@@ -137,7 +137,8 @@ void Game::Run()
         }
 
         //Rendering
-        glClearColor(0.1f, 0.1f, 0.3f, 1.0f); //Colour to display on cleared window
+        vec3 clearColour = light->GetClearColour();
+        glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f); //Colour to display on cleared window
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clears the colour buffer
 
         // Drawing light source
@@ -157,7 +158,7 @@ void Game::Run()
         }
 
         // Drawing monster
-        //monster->Draw(player->GetCamera(), light);
+        monster->Draw(player->GetCamera(), light);
 
         // Draw trees
         for (int i = 0; i < 10; i++)

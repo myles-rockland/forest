@@ -2,7 +2,7 @@
 #include "Common.h"
 #include "Camera.h"
 
-class Terrain;
+class Terrain; // Forward declaration because Terrain is needed, but including would cause a circular dependency
 
 class Light
 {
@@ -12,12 +12,14 @@ public:
 	vec3 GetAmbient() const;
 	vec3 GetDiffuse() const;
 	vec3 GetSpecular() const;
+	vec3 GetClearColour() const;
 	void Update(Terrain* terrain);
 	void Draw(Camera* camera);
 private:
 	void SetupBuffers();
 	vec3 position;
 	vec3 origin;
+	vec3 clearColour;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;

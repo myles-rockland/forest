@@ -1,5 +1,5 @@
-#include "Terrain.h"
 #include "Light.h"
+#include "Terrain.h"
 
 Light::Light(Terrain* terrain) : shaders("shaders/lighting.vert", "shaders/lighting.frag")
 {
@@ -62,13 +62,11 @@ Light::Light(Terrain* terrain) : shaders("shaders/lighting.vert", "shaders/light
     GLfloat** vertices = terrain->GetVertices();
     // Get middle vertex
     GLfloat* middleVertex = vertices[terrain->GetMapSize() / 2 - terrain->GetRenderDistance() / 2];
-    // Set position to middle vertex
+    // Set origin and position to middle vertex
     origin = vec3(middleVertex[0], 0.0f, middleVertex[2]);
     position = vec3(middleVertex[0], 0.0f, middleVertex[2]);
-    cout << "Light Position is { " << position.x << ", " << position.y << ", " << position.z << " }" << endl;
-    // Radius needs to be based on terrain render distance...
+    // Set radius based on terrain size
     radius = terrain->GetVerticesOffset() * terrain->GetRenderDistance();
-    //radius = terrain->GetRenderDistance();
     movementSpeed = 0.1f;
 
     SetupBuffers();
@@ -95,6 +93,17 @@ void Light::Update(Terrain* terrain)
     // Rotate light around origin at centre of terrain
     position.x = origin.x + sin(glfwGetTime() * movementSpeed) * radius;
     position.y = origin.y + cos(glfwGetTime() * movementSpeed) * radius;
+
+    // Update clear colour
+    // Figure out where current position is between lowest and highest poitn in terms of percentage
+    float min = origin.y + -1 * radius;
+    float max = origin.y + 1 * radius;
+    float percent = (position.y - min) / (max - min);
+
+    vec3 black(0.0f);
+    vec3 purpleGrey(0.8f, 0.8f, 0.9f);
+
+    clearColour = mix(black, purpleGrey, percent);
 }
 
 void Light::Draw(Camera* camera)
@@ -128,3 +137,4 @@ vec3 Light::GetPosition() const { return position; }
 vec3 Light::GetAmbient() const { return ambient; }
 vec3 Light::GetDiffuse() const { return diffuse; }
 vec3 Light::GetSpecular() const { return specular; }
+vec3 Light::GetClearColour() const { return clearColour; }
