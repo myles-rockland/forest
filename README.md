@@ -112,6 +112,8 @@ Models are loaded with textures using the Model class. Multiple formats are used
 The game is controlled using the keyboard and mouse.
 ![Keyboard/Mouse controls](./images/controls_keyboard.png)
 ![Keyboard/Mouse controls](./images/controls_mouse.png)
+![Keyboard/Mouse controls](./images/controls_mouse_callback2.png)
+![Keyboard/Mouse controls](./images/controls_mouse_callback.png)
 ### Audio Playback
 The game has background music as well as sound effects for different objects.
 ![Audio for page collection](./images/audio1.png)
