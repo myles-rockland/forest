@@ -4,7 +4,7 @@
 class Monster
 {
 public:
-	Monster(Terrain* terrain);
+	Monster(Terrain* terrain, irrklang::ISoundEngine* engine);
 	~Monster();
 	void Update(Camera* camera, float deltaTime);
 	void Draw(Camera* camera, Light* light); // Might not need light
@@ -18,5 +18,6 @@ private:
 	Terrain* terrain;
 	Shader shaders;
 	Model model;
+	irrklang::ISound* breathingSound;
 };
 

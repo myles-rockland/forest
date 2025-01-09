@@ -84,9 +84,6 @@ void Game::Run()
     // Create Player
     player = new Player(terrain, camera, soundEngine);
 
-    // Create Monster
-    monster = new Monster(terrain);
-
     // Create Collectables
     for (int i = 0; i < 5; i++)
     {
@@ -98,6 +95,9 @@ void Game::Run()
     {
         trees[i] = new Tree(terrain);
     }
+
+    // Create Monster
+    monster = new Monster(terrain, soundEngine);
 
     // Create Light
     light = new Light(terrain);
@@ -149,11 +149,21 @@ void Game::Run()
         // Update light
         light->Update(terrain);
 
-        // Update collectables
+        // Update collectables and count how many are collected
+        int collected = 0;
         for (int i = 0; i < 5; i++)
         {
             Collectable* collectable = collectables[i];
             collectable->Update(soundEngine);
+            if (collectable->IsCollected())
+            {
+                collected++;
+            }
+        }
+        if (collected == 5)
+        {
+            cout << "You collected all pages. You win!" << endl;
+            isRunning = false;
         }
 
         //Rendering
@@ -171,6 +181,7 @@ void Game::Run()
         for (int i = 0; i < 5; i++)
         {
             Collectable* collectable = collectables[i];
+            // If collectable is not collected, then draw it
             if (!collectable->IsCollected())
             {
                 collectable->Draw(player->GetCamera());

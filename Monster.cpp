@@ -1,16 +1,21 @@
 #include "Monster.h"
 
-Monster::Monster(Terrain* terrain) : movementSpeed(2.0f), terrain(terrain), shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/parasite/Parasite L Starkie.dae")
+Monster::Monster(Terrain* terrain, irrklang::ISoundEngine* engine) : movementSpeed(2.0f), terrain(terrain), shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/parasite/Parasite L Starkie.dae")
 {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	forward = vec3(0.0f, 0.0f, 1.0f);
 	radius = terrain->GetVerticesOffset() * 15;
 	caughtPlayer = false;
+	breathingSound = engine->play3D("./audio/zombie_breathing.ogg", irrklang::vec3df(position.x, position.y, position.z), true, false, true);
 }
 
 Monster::~Monster()
 {
 	delete terrain;
+	if (breathingSound)
+	{
+		breathingSound->drop();
+	}
 }
 
 void Monster::Update(Camera* camera, float deltaTime)
@@ -18,6 +23,7 @@ void Monster::Update(Camera* camera, float deltaTime)
 	// Check if camera is looking at monster
 	// Get direction between camera and monster
 	vec3 dirToPlayer = camera->GetPosition() - position;
+	float distToPlayer = distance(camera->GetPosition(), position);
 	// Remove y component, normalise
 	dirToPlayer.y = 0.0f;
 	dirToPlayer = normalize(dirToPlayer);
@@ -41,13 +47,16 @@ void Monster::Update(Camera* camera, float deltaTime)
 		position.y = heightMapNoise.GetNoise(position.x / terrain->GetVerticesOffset(), position.z / terrain->GetVerticesOffset()); // Need to divide by vertices offset due to how terrain is generated
 	}
 
+	// Update sound position
+	breathingSound->setPosition(irrklang::vec3df(position.x, position.y, position.z));
+
 	// Get distance between this and player
 	float dist = distance(position, camera->GetPosition());
 	// If player is within radius, the player was caught, i.e. game over
 	if (dist < radius)
 	{
 		caughtPlayer = true;
-		cout << "Player was caught! Game over!" << endl;
+		cout << "You were caught! Game over!" << endl;
 	}
 }
 

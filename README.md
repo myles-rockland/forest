@@ -8,6 +8,7 @@ Forest Game is a horror game about collecting pages.
 - GLM
 - LearnOpenGL files, including mesh.h, model.h, shader.h, shader_m.h
 - stbi_image.h header file
+- irrKlang
 
 ## Third-party Assets
 - Monster model and textures - https://www.mixamo.com/#/?page=1&query=parasite&type=Character
@@ -17,6 +18,7 @@ Forest Game is a horror game about collecting pages.
 - Ghostly Presence music (Website: Bensound, Artist: FoePound, License code: ZCM0KIEXOOQO8DYV) - https://www.bensound.com/royalty-free-music/track/ghostly-presence-creepy-dark
 - Paper Grab sfx - https://pixabay.com/sound-effects/paper-grab-259214/
 - Walking on Leaves sfx - https://pixabay.com/sound-effects/walking-on-leaves-260279/
+- Zombie Breathing sfx - https://pixabay.com/sound-effects/zombie-breathing-70682/
 
 ## YouTube Video
 YouTube Video: [insert some youtube video]
