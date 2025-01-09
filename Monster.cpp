@@ -2,7 +2,16 @@
 
 Monster::Monster(Terrain* terrain, irrklang::ISoundEngine* engine) : movementSpeed(2.0f), terrain(terrain), shaders("shaders/basic.vert", "shaders/basic.frag"), model("media/parasite/Parasite L Starkie.dae")
 {
-	position = vec3(0.0f, 0.0f, 0.0f);
+	// Spawn the player in middle of terrain
+	int middleIndex = terrain->GetMapSize() - 1;
+	GLfloat** vertices = terrain->GetVertices();
+	GLfloat* middleVertex = vertices[middleIndex];
+	float x = middleVertex[0];
+	float y = middleVertex[1];
+	float z = middleVertex[2];
+	position = vec3(x, y, z);
+
+	//position = vec3(0.0f, 0.0f, 0.0f);
 	forward = vec3(0.0f, 0.0f, 1.0f);
 	radius = terrain->GetVerticesOffset() * 15;
 	caughtPlayer = false;
