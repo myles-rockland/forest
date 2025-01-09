@@ -21,7 +21,7 @@ Forest Game is a horror game about collecting pages.
 - Zombie Breathing sfx - https://pixabay.com/sound-effects/zombie-breathing-70682/
 
 ## YouTube Video
-YouTube Video: [insert some youtube video]
+YouTube Video: https://youtu.be/COyJYV1WzHo
 
 ## Game Objective
 The objective of Forest Game is to search the environment for five pages while keeping an eye out for the monster.
