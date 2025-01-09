@@ -36,6 +36,7 @@ If the monster catches you, you lose.
 
 ## Controls
 - **WASD Keys** - Move forwards, left, right and backwards
+- **Mouse** - Look around
 - **Escape** - Quit game
 
 ## Design Diagrams
