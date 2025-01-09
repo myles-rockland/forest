@@ -95,7 +95,7 @@ void Light::Update(Terrain* terrain)
     position.y = origin.y + cos(glfwGetTime() * movementSpeed) * radius;
 
     // Update clear colour
-    // Figure out where current position is between lowest and highest poitn in terms of percentage
+    // Figure out where current position is between lowest and highest point in terms of percentage
     float min = origin.y + -1 * radius;
     float max = origin.y + 1 * radius;
     float percent = (position.y - min) / (max - min);

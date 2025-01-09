@@ -21,7 +21,6 @@ private:
 	float yaw; // Camera sideways rotation
 	float pitch; // Camera vertical rotation
 	const float sensitivity; // Mouse sensitivity
-	const float movementSpeed;
 
 	bool mouseFirstEntry; // Determines if first entry of mouse into window
 

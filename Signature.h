@@ -8,8 +8,7 @@ class Signature
 {
 public:
 	Signature();
-	~Signature();
-	void Draw(Camera* camera);
+	void Draw();
 	bool IsTexturesLoaded() const;
 private:
 	void SetupBuffers();

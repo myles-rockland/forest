@@ -48,6 +48,5 @@ void main()
 
     //Set colour of terrain to ambient + diffuse from lighting
     vec3 result = ambient + diffuse + specular;
-    //FragColor = vec4(result, 1.0) * texture(texture1, TexCoord);
     FragColor = vec4(result, 1.0) *  mix(texture(texture1, TexCoord), texture(texture2, TexCoord), MixFactor);
 }

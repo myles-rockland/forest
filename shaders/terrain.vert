@@ -13,7 +13,7 @@ out vec3 FragPos;
 out vec2 TexCoord;
 out float MixFactor;
 
-//Model-View-Projection Matrix
+// Material
 struct Material {
     vec3 ambient;
     vec3 diffuse;
@@ -21,6 +21,7 @@ struct Material {
     float shininess;
 }; 
 uniform Material material;
+//Model-View-Projection Matrices
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;

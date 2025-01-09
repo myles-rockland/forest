@@ -19,8 +19,6 @@ public:
 	bool IsTexturesLoaded() const;
 	float GetGrassBiomeValue() const;
 	float GetMixBiomeValue() const;
-	//void GenerateCollectables(Player* player);
-	//float GetTerrainBoundary
 private:
 	void GenerateVertices();
 	void GenerateIndices();

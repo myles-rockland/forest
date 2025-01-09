@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera() : sensitivity(0.025f), movementSpeed(1.0f)
+Camera::Camera() : sensitivity(0.025f)
 {
 	position = vec3(0.0f, 0.0f, 3.0f);
 	front = vec3(0.0f, 0.0f, 1.0f);

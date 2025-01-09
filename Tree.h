@@ -10,7 +10,6 @@ class Tree
 public:
 	Tree();
 	Tree(Terrain* terrain);
-	~Tree();
 	void Draw(Camera* camera);
 private:
 	vec3 position;

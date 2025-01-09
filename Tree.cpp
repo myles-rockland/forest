@@ -31,8 +31,6 @@ Tree::Tree(Terrain* terrain) : shaders("shaders/basic.vert", "shaders/basic.frag
 	position = vec3(vertex[0], vertex[1] - 0.3f, vertex[2]);
 }
 
-Tree::~Tree() {}
-
 void Tree::Draw(Camera* camera)
 {
 	shaders.use();

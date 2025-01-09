@@ -18,10 +18,15 @@ Game::Game() : deltaTime(0.0f), lastFrame(0.0f), isRunning(true), camera(nullptr
         return;
     }
 
-    //Initialisation of GLFW
-    glfwInit();
+    // Initialisation of GLFW
+    if (glfwInit() == GLFW_FALSE)
+    {
+        cout << "GLFW failed to initialise" << endl;
+        isRunning = false;
+        return;
+    }
 
-    //Initialisation of 'GLFWwindow' object
+    // Initialisation of 'GLFWwindow' object
     window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Forest Game", NULL, NULL);
 
     // Error handling to check if window has been successfully instantiated
@@ -253,5 +258,5 @@ void Game::Draw()
     }
 
     // Drawing signature
-    signature->Draw(player->GetCamera());
+    signature->Draw();
 }

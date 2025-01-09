@@ -42,80 +42,85 @@ If the monster catches you, you lose.
 
 ### Class Diagram
 The following diagram highlights the main classes, member variables and methods within the game:
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
+![Class Diagram](./images/forest_class_diagram.png)
 
-## Game Programming Patterns
+## Programming Patterns
 
 ### Game Loop
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
+![Game loop pattern](./images/game_loop.png)
 ### Update Method
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
+![Update Method pattern in Monster](./images/monster_update_method.png)
+![Update Method pattern in Light](./images/light_update_method.png)
+![Update Method pattern in Collectable](./images/collectable_update_method.png)
 ### Composition
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
+![Composition pattern in Game](./images/composition.png)
 
 ## Game Features/Mechanics + Example Code
 
 ### Moving Player
-The player can move around the terrain, restricting the player to stay within the boundaries. The player's y position is based on the terrain's heightmap.
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
+The player can move and look around the terrain, restricting the player to stay within the boundaries. The player's y position is based on the terrain's heightmap.
+![Player movement](./images/player_movement.gif)
+![Code example of player movement](./images/player_movement.png)
+![Code example of player movement, restricted to the terrain, and updating y position based on terrain heightmap](./images/player_movement2.png)
 ### Moving Monster
 The monster will move and rotate towards the player while they are not looking. The monster's y position is also based on the terrain's heightmap.
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
+![Monster movement](./images/monster_movement.gif)
+![Code example of monster movement](./images/monster_movement_code.png)
 ### Page Collection
 Pages will disappear when the player walks into them and collects them.
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
+![Page collection](./images/page_collection.gif)
+![Code example of collecting a page](./images/page_collection.png)
+![Code example of collecting a page, disabling drawing if it is collected](./images/page_collection2.png)
 ### Model-View-Projection
 Everything in the game is rendered using Model-View-Projection matrices.
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) CPP implementation -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Vertex shader implementation -->
+![C++ code example of Model-View-Projection matrices in use for terrain](./images/mvp_cpp_terrain.png)
+![GLSL vertex shader code example of Model-View-Projection matrices in use for terrain](./images/mvp_vert_terrain.png)
+![C++ code example of Model-View-Projection matrices in use for monster](./images/mvp_cpp_monster1.png)
+![C++ code example of Model-View-Projection matrices in use for monster](./images/mvp_cpp_monster2.png)
+![GLSL vertex shader code example of Model-View-Projection matrices in use for monster](./images/mvp_vert_monster.png)
 ### Procedural Terrain Generation
 The terrain is generated procedurally with three different biomes, giving a different terrain every time you play the game.
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Vertex generation -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Heightmap assignment -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Biome assignment -->
+![Procedural terrain generation](./images/pcg1.png)
+![Procedural terrain generation](./images/pcg2.png)
+![Code example of seeding of random function based on current time](./images/pcg_code1.png)
+![Code example of terrain generation of vertices](./images/pcg_code2.png)
+![Code example of terrain generation of vertices x and z position](./images/pcg_code2-5.png)
+![Code example of terrain generation of vertices y position based on heightmap](./images/pcg_code3.png)
+![Code example of terrain generation of vertices biomes based on cellular noise](./images/pcg_code4.png)
 ### Texture mixing
 Textures in the terrain are mixed together to create "middle" biomes.
-<!-- ![Game loop pattern in Letrio](./images/game_loop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) -->
+![Texture mixing](./images/grass.png)
+![Texture mixing](./images/dirty-grass.png)
+![Texture mixing](./images/texture_mixing.png)
+![Code example of texture mixing setup in C++](./images/texture_mixing_code1.png)
+![Code example of texture mixing in fragment shader](./images/texture_mixing_code2.png)
 ### Scene Animations
 Some objects in the scene are animated, moving/rotating over time.
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) SUN rotation gif -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) SUN rotation code -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) PAGE rotation gif -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) PAGE rotation code -->
+![Scene animations with moving sun](./images/sunset.gif)
+![Code example of sunset](./images/sunset_code.png)
+![Code example of sunset](./images/sunset_code2.png)
+![Scene animations with floating and rotating collectables](./images/page_animation.gif)
+![Code example of floating and rotating collectables](./images/page_animation_code.png)
 ### Loaded Models with Textures
 Models are loaded with textures using the Model class. Multiple formats are used.
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Monster model with textures -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Monster class constructor -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) Page class constructor -->
+![Loaded model with textures](./images/model_monster.png)
+![Loaded model with textures](./images/model_page.png)
+![Code example of loaded model with textures, using .dae format](./images/model_monster_code.png)
+![Code example of loaded model with textures, using .gltf format](./images/model_page_code.png)
 ### Keyboard/Mouse Controls
 The game is controlled using the keyboard and mouse.
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) SUN rotation gif -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) SUN rotation code -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) PAGE rotation gif -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) PAGE rotation code -->
+![Keyboard/Mouse controls](./images/controls_keyboard.png)
+![Keyboard/Mouse controls](./images/controls_mouse.png)
 
 ## Exception Handling
 
 ### System/Subsystem Initialisation
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) GLAD -->
-<!-- ![Code example of dropping a piece](./images/code_example_drop.png) GLFW -->
+![System/Subsystem initialisation](./images/error_handling1.png)
+![System/Subsystem initialisation](./images/error_handling2.png)
 
 ## Evaluation
 I believe that I have created a software prototype of a game that demonstrates a good understanding of writing C++ and OpenGL programs.
 
 I am particularly proud of the basic lighting implementation, as it significantly improves the aesthetics of the game by making colours less flat.
 
-If I were to improve something about this project, I would implement some UI to create visual feedback for when the player collects pages. I would also implement some music and sound effects.
+If I were to improve something about this project, I would implement some UI to create visual feedback for when the player collects pages.

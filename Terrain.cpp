@@ -260,7 +260,7 @@ void Terrain::SetupBuffers()
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    //Textures
+    //Texture coords
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(float), (void*)(9 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
@@ -360,10 +360,6 @@ void Terrain::Draw(Camera* camera, Light* light)
     //Transformations
     //Model matrix
     mat4 model = mat4(1.0f);
-    //Scaling to zoom in
-    //model = scale(model, vec3(2.0f, 2.0f, 2.0f));
-    //Elevation to look upon terrain
-    //model = translate(model, vec3(0.0f, -2.0f, -1.5f));
 
     // View matrix
     mat4 view = lookAt(camera->GetPosition(), camera->GetPosition() + camera->GetFront(), camera->GetUp()); //Sets the position of the viewer, the movement direction in relation to it & the world up direction

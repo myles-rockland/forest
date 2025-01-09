@@ -16,16 +16,19 @@ public:
 	Game();
 	~Game();
 	void Run();
-	void Initialise();
-	void Update();
-	void Draw();
 private:
 	// Called on window resize
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	// Called on mouse movement
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+	// Initialise game objects
+	void Initialise();
 	// Processes user input on a particular window
 	void ProcessUserInput(GLFWwindow* WindowIn);
+	// Update all game objects
+	void Update();
+	// Render all game objects
+	void Draw();
 
 	static Game* instance;
 	irrklang::ISoundEngine* soundEngine;

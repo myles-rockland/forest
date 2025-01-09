@@ -31,11 +31,6 @@ Signature::Signature() : shaders("shaders/signature.vert", "shaders/signature.fr
     SetupTextures();
 }
 
-Signature::~Signature()
-{
-    // No pointers to delete, so empty
-}
-
 void Signature::SetupBuffers()
 {
     //Sets index of VAO
@@ -108,7 +103,7 @@ void Signature::SetupTextures()
     stbi_image_free(data);
 }
 
-void Signature::Draw(Camera* camera)
+void Signature::Draw()
 {
     shaders.use();
 
