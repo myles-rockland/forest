@@ -16,6 +16,9 @@ public:
 	Game();
 	~Game();
 	void Run();
+	void Initialise();
+	void Update();
+	void Draw();
 private:
 	// Called on window resize
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);

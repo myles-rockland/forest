@@ -69,10 +69,69 @@ Game::~Game()
     delete monster;
     delete[] collectables;
     delete[] trees;
+    delete signature;
     soundEngine->drop(); // Delete sound engine
 }
 
 void Game::Run()
+{
+    Initialise();
+
+    // Input/Update/Render Game loop
+    while (glfwWindowShouldClose(window) == false && isRunning)
+    {
+        //Time
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        // Input
+        ProcessUserInput(window); //Takes user input
+
+        // Update
+        Update();
+
+        // Rendering
+        Draw();
+
+        // Refreshing
+        glfwSwapBuffers(window); // Swaps the colour buffer
+        glfwPollEvents(); // Polls for all GLFW events
+    }
+
+    //Safely terminates GLFW
+    glfwTerminate();
+}
+
+void Game::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    //Resizes window based on contemporary width & height values
+    glViewport(0, 0, width, height);
+}
+
+void Game::mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (instance && instance->camera)
+    {
+        instance->camera->MouseCallback(window, xpos, ypos);
+    }
+}
+
+void Game::ProcessUserInput(GLFWwindow* windowIn)
+{
+    //Closes window on 'exit' key press
+    if (glfwGetKey(windowIn, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(windowIn, true);
+    }
+
+    if (player)
+    {
+        player->ProcessInput(windowIn, deltaTime, soundEngine);
+    }
+}
+
+void Game::Initialise()
 {
     // Create Terrain
     terrain = new Terrain();
@@ -119,120 +178,80 @@ void Game::Run()
     //glEnable(GL_CULL_FACE);
 
     // Enable blending for transparency in textures
-    glEnable(GL_BLEND); 
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
 
-    // Input/Update/Render Game loop
-    while (glfwWindowShouldClose(window) == false && isRunning)
+void Game::Update()
+{
+    // Update listener position for irrklang
+    vec3 cameraPosition = camera->GetPosition();
+    vec3 cameraForward = camera->GetFront();
+    soundEngine->setListenerPosition(irrklang::vec3df(cameraPosition.x, cameraPosition.y, cameraPosition.z), irrklang::vec3df(cameraForward.x, cameraForward.y, cameraForward.z));
+
+    // Updating objects
+    // Update monster
+    monster->Update(player->GetCamera(), deltaTime);
+    // Check if monster caught player
+    if (monster->GetCaughtPlayer())
     {
-        //Time
-        float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-
-        // Input
-        ProcessUserInput(window); //Takes user input
-        // Update listener position for irrklang
-        vec3 cameraPosition = camera->GetPosition();
-        vec3 cameraForward = camera->GetFront();
-        soundEngine->setListenerPosition(irrklang::vec3df(cameraPosition.x, cameraPosition.y, cameraPosition.z), irrklang::vec3df(cameraForward.x, cameraForward.y, cameraForward.z));
-
-        // Updating objects
-        // Update monster
-        monster->Update(player->GetCamera(), deltaTime);
-        // Check if monster caught player
-        if (monster->GetCaughtPlayer())
-        {
-            isRunning = false;
-        }
-
-        // Update light
-        light->Update(terrain);
-
-        // Update collectables and count how many are collected
-        int collected = 0;
-        for (int i = 0; i < 5; i++)
-        {
-            Collectable* collectable = collectables[i];
-            collectable->Update(soundEngine);
-            if (collectable->IsCollected())
-            {
-                collected++;
-            }
-        }
-        if (collected == 5)
-        {
-            cout << "You collected all pages. You win!" << endl;
-            isRunning = false;
-        }
-
-        //Rendering
-        vec3 clearColour = light->GetClearColour();
-        glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f); //Colour to display on cleared window
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clears the colour buffer
-
-        // Drawing light source
-        light->Draw(player->GetCamera());
-
-        // Drawing terrain
-        terrain->Draw(player->GetCamera(), light);
-
-        // Drawing collectables
-        for (int i = 0; i < 5; i++)
-        {
-            Collectable* collectable = collectables[i];
-            // If collectable is not collected, then draw it
-            if (!collectable->IsCollected())
-            {
-                collectable->Draw(player->GetCamera());
-            }
-        }
-
-        // Drawing monster
-        monster->Draw(player->GetCamera(), light);
-
-        // Draw trees
-        for (int i = 0; i < 10; i++)
-        {
-            trees[i]->Draw(player->GetCamera());
-        }
-
-        // Drawing signature
-        signature->Draw(player->GetCamera());
-
-        // Refreshing
-        glfwSwapBuffers(window); // Swaps the colour buffer
-        glfwPollEvents(); // Polls for all GLFW events
+        isRunning = false;
     }
 
-    //Safely terminates GLFW
-    glfwTerminate();
-}
+    // Update light
+    light->Update(terrain);
 
-void Game::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    //Resizes window based on contemporary width & height values
-    glViewport(0, 0, width, height);
-}
-
-void Game::mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (instance && instance->camera)
+    // Update collectables and count how many are collected
+    int collected = 0;
+    for (int i = 0; i < 5; i++)
     {
-        instance->camera->MouseCallback(window, xpos, ypos);
+        Collectable* collectable = collectables[i];
+        collectable->Update(soundEngine);
+        if (collectable->IsCollected())
+        {
+            collected++;
+        }
+    }
+    if (collected == 5)
+    {
+        cout << "You collected all pages. You win!" << endl;
+        isRunning = false;
     }
 }
 
-void Game::ProcessUserInput(GLFWwindow* windowIn)
+void Game::Draw()
 {
-    //Closes window on 'exit' key press
-    if (glfwGetKey(windowIn, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    //Rendering
+    vec3 clearColour = light->GetClearColour();
+    glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f); //Colour to display on cleared window
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clears the colour buffer
+
+    // Drawing light source
+    light->Draw(player->GetCamera());
+
+    // Drawing terrain
+    terrain->Draw(player->GetCamera(), light);
+
+    // Drawing collectables
+    for (int i = 0; i < 5; i++)
     {
-        glfwSetWindowShouldClose(windowIn, true);
+        Collectable* collectable = collectables[i];
+        // If collectable is not collected, then draw it
+        if (!collectable->IsCollected())
+        {
+            collectable->Draw(player->GetCamera());
+        }
     }
 
-    if (player)
+    // Drawing monster
+    monster->Draw(player->GetCamera(), light);
+
+    // Draw trees
+    for (int i = 0; i < 10; i++)
     {
-        player->ProcessInput(windowIn, deltaTime, soundEngine);
+        trees[i]->Draw(player->GetCamera());
     }
+
+    // Drawing signature
+    signature->Draw(player->GetCamera());
 }
