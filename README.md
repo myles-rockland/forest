@@ -90,7 +90,7 @@ The terrain is generated procedurally with three different biomes, giving a diff
 ### Texture mixing
 Textures in the terrain are mixed together to create "middle" biomes.
 ![Texture mixing](./images/grass.png)
-![Texture mixing](./images/dirty-grass.png)
+![Texture mixing](./images/dirty-grass.jpg)
 ![Texture mixing](./images/texture_mixing.png)
 ![Code example of texture mixing setup in C++](./images/texture_mixing_code1.png)
 ![Code example of texture mixing in fragment shader](./images/texture_mixing_code2.png)
@@ -111,6 +111,12 @@ Models are loaded with textures using the Model class. Multiple formats are used
 The game is controlled using the keyboard and mouse.
 ![Keyboard/Mouse controls](./images/controls_keyboard.png)
 ![Keyboard/Mouse controls](./images/controls_mouse.png)
+### Audio Playback
+The game has background music as well as sound effects for different objects.
+![Audio for page collection](./images/audio1.png)
+![Audio for monster breathing](./images/audio2.png)
+![Audio for player walking](./images/audio3.png)
+![Audio for background music](./images/audio4.png)
 
 ## Exception Handling
 
